@@ -76,15 +76,7 @@ io.use(function(socket, next) {
 
 io.on('connection', function(socket) {
   console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
-  // try {
-  //   if (userArray[socket.request.session.passport.user]) {
-  //     socket.disconnect()
-  //   }
-  // }
-  // catch (e) {
-  //   console.log(e)
-  // }
-  // console.log(socket.request.session.passport.user)
+  if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
   // create user object for additional data
   users[socket.id] = {
     inGame: null,
