@@ -1,3 +1,4 @@
+const path = require('path')
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -13,7 +14,53 @@ var port = 8900;
 var users = {};
 var gameIdCounter = 1;
 
+const passport = require('passport')
+const Strategy = require('passport-local').Strategy
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const cookieSession = require('cookie-session')
+
+passport.use(new Strategy(function(username, password, cb){
+  if (!username || !password) return cb(new Error('Error'))
+  else if (password == 'pass') return cb(null, {username: username, password: 'pass'})
+  else return cb(null, false)
+}))
+passport.serializeUser(function(user, cb){
+  cb(null, user.username)
+})
+passport.deserializeUser(function(id, cb){
+  cb(null, {username: id, password:'pass'})
+})
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cookieSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID'}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.disable('x-powered-by');
+
+app.get('/', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
+  res.render('index')
+});
+app.get('/login', function(req, res) {
+  if (req.user) res.redirect('/');
+  else res.render('login');
+});
+app.post('/login', passport.authenticate('local', {
+  successReturnToOrRedirect: '/',
+  failureRedirect: '/login'
+}), function(req, res) {
+  res.redirect('/');
+});
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
 
 http.listen(port, function(){
   console.log('listening on *:' + port);
@@ -26,7 +73,7 @@ io.on('connection', function(socket) {
   users[socket.id] = {
     inGame: null,
     player: null
-  }; 
+  };
 
   // join waiting room until there are enough players to start a new game
   socket.join('waiting room');
@@ -37,7 +84,7 @@ io.on('connection', function(socket) {
   socket.on('chat', function(msg) {
     if(users[socket.id].inGame !== null && msg) {
       console.log((new Date().toISOString()) + ' Chat message from ' + socket.id + ': ' + msg);
-      
+
       // Send message to opponent
       socket.broadcast.to('game' + users[socket.id].inGame.id).emit('chat', {
         name: 'Opponent',
@@ -74,7 +121,7 @@ io.on('connection', function(socket) {
       }
     }
   });
-  
+
   /**
    * Handle leave game request
    */
@@ -92,7 +139,7 @@ io.on('connection', function(socket) {
    */
   socket.on('disconnect', function() {
     console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
-    
+
     leaveGame(socket);
 
     delete users[socket.id];
@@ -106,7 +153,7 @@ io.on('connection', function(socket) {
  */
 function joinWaitingPlayers() {
   var players = getClientsInRoom('waiting room');
-  
+
   if(players.length >= 2) {
     // 2 player waiting. Create new game!
     var game = new BattleshipGame(gameIdCounter++, players[0].id, players[1].id);
@@ -121,7 +168,7 @@ function joinWaitingPlayers() {
     users[players[1].id].player = 1;
     users[players[0].id].inGame = game;
     users[players[1].id].inGame = game;
-    
+
     io.to('game' + game.id).emit('join', game.id);
 
     // send initial ship placements
