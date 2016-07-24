@@ -12,13 +12,14 @@ var GameStatus = require('./app/gameStatus.js');
 var port = 8900;
 
 var users = {};
+var userArray = {};
 var gameIdCounter = 1;
 
 const passport = require('passport')
 const Strategy = require('passport-local').Strategy
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const cookieSession = require('cookie-session')
+const expressSession = require('express-session')
 
 passport.use(new Strategy(function(username, password, cb){
   if (!username || !password) return cb(new Error('Error'))
@@ -32,6 +33,8 @@ passport.deserializeUser(function(id, cb){
   cb(null, {username: id, password:'pass'})
 })
 
+var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID', resave: false, saveUninitialized: false})
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -39,12 +42,13 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cookieSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID'}));
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.disable('x-powered-by');
 
 app.get('/', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
+  if (userArray[req.user.username]) return res.send('Mutiple connections are not allowed.')
   res.render('index')
 });
 app.get('/login', function(req, res) {
@@ -66,14 +70,27 @@ http.listen(port, function(){
   console.log('listening on *:' + port);
 });
 
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
+
 io.on('connection', function(socket) {
   console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
-
+  // try {
+  //   if (userArray[socket.request.session.passport.user]) {
+  //     socket.disconnect()
+  //   }
+  // }
+  // catch (e) {
+  //   console.log(e)
+  // }
+  // console.log(socket.request.session.passport.user)
   // create user object for additional data
   users[socket.id] = {
     inGame: null,
     player: null
   };
+  userArray[socket.request.session.passport.user] = socket.id;
 
   // join waiting room until there are enough players to start a new game
   socket.join('waiting room');
@@ -139,10 +156,11 @@ io.on('connection', function(socket) {
    */
   socket.on('disconnect', function() {
     console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
-
+    // console.log(socket.request.session.passport.user)
     leaveGame(socket);
 
     delete users[socket.id];
+    delete userArray[socket.request.session.passport.user]
   });
 
   joinWaitingPlayers();
