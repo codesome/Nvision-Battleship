@@ -12,10 +12,10 @@ var GameStatus = require('./app/gameStatus.js');
 var port = 8900;
 
 var users = {};
-var userArray = {};
+userArray = {};
 var gameIdCounter = 1;
 
-const passport = require('passport')
+passport = require('passport')
 const Strategy = require('passport-local').Strategy
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
@@ -47,24 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.disable('x-powered-by');
 
-app.get('/', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
-  if (userArray[req.user.username]) return res.send('Mutiple connections are not allowed.')
-  res.render('index')
-});
-app.get('/login', function(req, res) {
-  if (req.user) res.redirect('/');
-  else res.render('login');
-});
-app.post('/login', passport.authenticate('local', {
-  successReturnToOrRedirect: '/',
-  failureRedirect: '/login'
-}), function(req, res) {
-  res.redirect('/');
-});
-app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
-});
+app.use('/', require('./routes/index'))
 
 http.listen(port, function(){
   console.log('listening on *:' + port);
