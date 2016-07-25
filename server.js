@@ -31,7 +31,8 @@ var config = require('./config.js')
 passport.use(new FacebookStrategy({
   clientID: config.facebook.clientID,
   clientSecret: config.facebook.clientSecret,
-  callbackURL: '/auth/facebook/callback'
+  callbackURL: '/auth/facebook/callback',
+  profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
   console.log(profile);
   // TODO Store in database
