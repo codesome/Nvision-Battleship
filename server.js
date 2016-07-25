@@ -23,6 +23,8 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const expressSession = require('express-session')
 
+var User = require('./models/User.js');
+
 var config = require('./config.js')
 
 passport.use(new FacebookStrategy({
@@ -44,9 +46,6 @@ passport.use(new FacebookStrategy({
         newUser.facebook.id = profile.id;
         newUser.facebook.token = accessToken;
         newUser.facebook.displayName = profile.displayName;
-        newUser.facebook.name.familyName = profile.name.familyName;
-        newUser.facebook.name.givenName = profile.name.givenName;
-        newUser.facebook.gender = profile.gender;
         newUser.facebook.profileUrl = profile.profileUrl;
         newUser.facebook.email = profile.emails[0].value;
         newUser.save(function(err) {
@@ -81,11 +80,7 @@ passport.use(new GoogleStrategy({
           newUser.google.id = profile.id;
           newUser.google.token = token;
           newUser.google.displayName = profile.displayName;
-          newUser.google.name.familyName = profile.name.familyName;
-          newUser.google.name.givenName = profile.name.givenName;
           newUser.google.email = profile.emails[0].value;
-          newUser.google.gender = profile.gender;
-          newUser.google.domain = profile._json.domain;
           newUser.google.profileUrl = profile._json.url;
           newUser.save(function(err) {
             if (err) {
@@ -100,12 +95,9 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser(function(user, cb){
-  cb(null, user.id)
+  cb(null, user)
 })
-passport.deserializeUser(function(id, cb){
-  var user = {};
-  // TODO get user object from db using id
-  // cb(err) if err, cb(null, user) if authenticated
+passport.deserializeUser(function(user, cb){
   cb(null, user)
 })
 
