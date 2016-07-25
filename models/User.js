@@ -8,12 +8,6 @@ var userSchema = new Schema({
 
   username: String,
 
-  password: String,
-
-  email: String,
-
-  phone: String,
-
   gamesPlayed: Number,
 
   gamesWon: Number,
@@ -22,9 +16,37 @@ var userSchema = new Schema({
 
     playedWith: String, // id
 
-    status: String // 'W'==won 'L'==lost 'N'==no_result
+    result: Boolean // 'W'==won 'L'==lost 'N'==no_result
 
-  }]
+  }],
+
+  google: {
+
+    id: String,
+
+    token: String,
+
+    displayName: String,
+
+    email: String,
+
+    profileUrl: String
+
+  },
+
+  facebook: {
+
+    id: String,
+
+    token: String,
+
+    displayName: String,
+
+    email: String,
+
+    profileUrl: String
+
+  }
 
 });
 

@@ -24,6 +24,8 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const expressSession = require('express-session')
 
+var User = require('./models/User.js');
+
 var config = require('./config.js')
 
 passport.use(new FacebookStrategy({
@@ -32,36 +34,31 @@ passport.use(new FacebookStrategy({
   callbackURL: '/auth/facebook/callback'
 }, function(accessToken, refreshToken, profile, done) {
   // TODO Store in database
-  console.log(profile)
-  cb(null, profile)
-  // process.nextTick(function() {
-  //   User.findOne({
-  //     'facebook.id': profile.id
-  //   }, function(err, user) {
-  //     if (err)
-  //       return done(err);
-  //     if (user) {
-  //       return done(null, user)
-  //     } else {
-  //       var newUser = new User();
-  //       newUser.facebook.id = profile.id;
-  //       newUser.facebook.token = accessToken;
-  //       newUser.facebook.displayName = profile.displayName;
-  //       newUser.facebook.name.familyName = profile.name.familyName;
-  //       newUser.facebook.name.givenName = profile.name.givenName;
-  //       newUser.facebook.gender = profile.gender;
-  //       newUser.facebook.profileUrl = profile.profileUrl;
-  //       newUser.facebook.email = profile.emails[0].value;
-  //       newUser.save(function(err) {
-  //         if (err) {
-  //           return done(err)
-  //         } else {
-  //           return done(null, newUser) // user shoud have id field
-  //         }
-  //       })
-  //     }
-  //   })
-  // });
+  process.nextTick(function() {
+    User.findOne({
+      'facebook.id': profile.id
+    }, function(err, user) {
+      if (err)
+        return done(err);
+      if (user) {
+        return done(null, user)
+      } else {
+        var newUser = new User();
+        newUser.facebook.id = profile.id;
+        newUser.facebook.token = accessToken;
+        newUser.facebook.displayName = profile.displayName;
+        newUser.facebook.profileUrl = profile.profileUrl;
+        newUser.facebook.email = profile.emails[0].value;
+        newUser.save(function(err) {
+          if (err) {
+            return done(err)
+          } else {
+            return done(null, newUser) // user shoud have id field
+          }
+        })
+      }
+    })
+  });
 }));
 
 passport.use(new GoogleStrategy({
@@ -70,47 +67,37 @@ passport.use(new GoogleStrategy({
     callbackURL: '/auth/google/callback'
   },
   function(token, refreshToken, profile, done) {
-    // TODO Store in db
-    console.log(profile)
-    cb(null, profile)
-  //   process.nextTick(function() {
-  //     User.findOne({
-  //       'google.id': profile.id
-  //     }, function(err, user) {
-  //       if (err) {
-  //         return done(err)
-  //       } else if (user) {
-  //         return done(null, user)
-  //       } else {
-  //         var newUser = new User();
-  //         newUser.google.id = profile.id;
-  //         newUser.google.token = token;
-  //         newUser.google.displayName = profile.displayName;
-  //         newUser.google.name.familyName = profile.name.familyName;
-  //         newUser.google.name.givenName = profile.name.givenName;
-  //         newUser.google.email = profile.emails[0].value;
-  //         newUser.google.gender = profile.gender;
-  //         newUser.google.domain = profile._json.domain;
-  //         newUser.google.profileUrl = profile._json.url;
-  //         newUser.save(function(err) {
-  //           if (err) {
-  //             return done(err)
-  //           } else {
-  //             return done(null, newUser) // User should have id filed
-  //           }
-  //         })
-  //       }
-  //   })
-  // });
+    process.nextTick(function() {
+      User.findOne({
+        'google.id': profile.id
+      }, function(err, user) {
+        if (err) {
+          return done(err)
+        } else if (user) {
+          return done(null, user)
+        } else {
+          var newUser = new User();
+          newUser.google.id = profile.id;
+          newUser.google.token = token;
+          newUser.google.displayName = profile.displayName;
+          newUser.google.email = profile.emails[0].value;
+          newUser.google.profileUrl = profile._json.url;
+          newUser.save(function(err) {
+            if (err) {
+              return done(err)
+            } else {
+              return done(null, newUser) // User should have id filed
+            }
+          })
+        }
+    })
+  });
 }));
 
 passport.serializeUser(function(user, cb){
-  cb(null, user.id)
+  cb(null, user)
 })
-passport.deserializeUser(function(id, cb){
-  var user = {};
-  // TODO get user object from db using id
-  // cb(err) if err, cb(null, user) if authenticated
+passport.deserializeUser(function(user, cb){
   cb(null, user)
 })
 
