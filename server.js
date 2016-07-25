@@ -46,8 +46,6 @@ passport.use(new FacebookStrategy({
   callbackURL: 'http://localhost:8900/auth/facebook/callback',
   profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
-  console.log(profile);
-  // TODO Store in database
   process.nextTick(function() {
     User.findOne({
       'id': profile.emails[0].value
@@ -70,7 +68,7 @@ passport.use(new FacebookStrategy({
           if (err) {
             return done(err)
           } else {
-              return done(null, newUser) // user shoud have id field
+            return done(null, newUser) // user shoud have id field
           }
         })
       }
@@ -84,7 +82,6 @@ passport.use(new GoogleStrategy({
     callbackURL: 'http://localhost:8900/auth/google/callback'
   },
   function(token, refreshToken, profile, done) {
-    console.log(profile);
     process.nextTick(function() {
       User.findOne({
         'id': profile.emails[0].value
