@@ -11,6 +11,11 @@ var User = require('../models/User.js');
  */
 function BattleshipGame(id, idPlayer1, idPlayer2) {
   var This = this;
+  This.id = id;
+  This.currentPlayer = Math.floor(Math.random() * 2);
+  This.winningPlayer = null;
+  This.gameStatus = GameStatus.inProgress;
+  This.players = [new Player(idPlayer1), new Player(idPlayer2)];
   var d = new Date();
   User.findOne({id:users[idPlayer1]},function(err,user1){
     User.findOne({id:users[idPlayer2]},function(err,user2){
@@ -28,14 +33,10 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
         });
         user2.gamesPlayed++;
         user1.save(function(err){
-          if(err) console.log(err);
+          if(err) console.log(err); // TODO Handle error
           user2.save(function(err){
-            if(err) console.log(err);
-            This.id = id;
-            This.currentPlayer = Math.floor(Math.random() * 2);
-            This.winningPlayer = null;
-            This.gameStatus = GameStatus.inProgress;
-            This.players = [new Player(idPlayer1), new Player(idPlayer2)];
+            if(err) console.log(err); // TODO Handle error
+            // Removed
           });
         });
       }
@@ -153,6 +154,7 @@ BattleshipGame.prototype.getGrid = function(player, hideShips) {
 BattleshipGame.prototype.endGame = function() {
   var This = this;
   var d = new Date();
+  This.gameStatus = GameStatus.gameOver;
   User.findOne({id:This.getWinnerId()},function(err,winner){
     User.findOne({id:This.getLoserId()},function(err,loser){
       if(winner && loser) {
@@ -174,10 +176,10 @@ BattleshipGame.prototype.endGame = function() {
         }
         winner.gamesWon++;
         winner.save(function(err){
-          if(err) console.log(err);
+          if(err) console.log(err); // TODO Handle error
           loser.save(function(err){
-            if(err) console.log(err);
-            This.gameStatus = GameStatus.gameOver;
+            if(err) console.log(err); // TODO Handle error
+            // Removed this
             return;
           });
         });

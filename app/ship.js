@@ -19,5 +19,3 @@ Ship.prototype.isSunk = function() {
 };
 
 module.exports = Ship;
-
-

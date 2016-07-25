@@ -7,7 +7,7 @@ $(function() {
   socket.on('connect', function() {
     console.log('Connected to server.');
     $('#disconnected').hide();
-    $('#waiting-room').show();   
+    $('#waiting-room').show();
   });
 
   /**
@@ -62,7 +62,7 @@ $(function() {
   socket.on('gameover', function(isWinner) {
     Game.setGameOver(isWinner);
   });
-  
+
   /**
    * Leave game and join waiting room
    */

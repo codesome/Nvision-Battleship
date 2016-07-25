@@ -9,7 +9,7 @@
     <% for(var i=0 ; i<data.length ; i++) { %>
       <tr>
         <td><%= data[i].playedWith %><td>
-        <td><if(data[i].result){>Won<%}else{%>Lost<%}%><td>
+        <td><%if(data[i].result){%>Won<%}else{%>Lost<%}%><td>
       </tr>
     <% } %>
   </tbody>

@@ -7,7 +7,7 @@ var Settings = require('./settings.js');
  */
 function Player(id) {
   var i;
-  
+
   this.id = id;
   this.shots = Array(Settings.gridRows * Settings.gridCols);
   this.shipGrid = Array(Settings.gridRows * Settings.gridCols);
@@ -84,14 +84,14 @@ Player.prototype.createRandomShips = function() {
 
   for(shipIndex = 0; shipIndex < Settings.ships.length; shipIndex++) {
     ship = new Ship(Settings.ships[shipIndex]);
-  
+
     if(!this.placeShipRandom(ship, shipIndex)) {
       return false;
     }
 
     this.ships.push(ship);
   }
-  
+
   return true;
 };
 
@@ -124,7 +124,7 @@ Player.prototype.placeShipRandom = function(ship, shipIndex) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -152,7 +152,7 @@ Player.prototype.checkShipOverlap = function(ship) {
  * @returns {Boolean} True if adjacent ship found
  */
 Player.prototype.checkShipAdjacent = function(ship) {
-  var i, j, 
+  var i, j,
       x1 = ship.x - 1,
       y1 = ship.y - 1,
       x2 = ship.horizontal ? ship.x + ship.size : ship.x + 1,

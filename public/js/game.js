@@ -78,7 +78,7 @@ var Game = (function() {
     var i;
 
     gameStatus = GameStatus.inProgress;
-    
+
     // Create empty grids for player and opponent
     grid[0] = { shots: Array(gridRows * gridCols), ships: [] };
     grid[1] = { shots: Array(gridRows * gridCols), ships: [] };
@@ -131,7 +131,7 @@ var Game = (function() {
   function setGameOver(isWinner) {
     gameStatus = GameStatus.gameOver;
     turn = false;
-    
+
     if(isWinner) {
       $('#turn-status').removeClass('alert-opponent-turn').removeClass('alert-your-turn')
               .addClass('alert-winner').html('You won! <a href="#" class="btn-leave-game">Play again</a>.');
@@ -188,7 +188,7 @@ var Game = (function() {
         shipWidth, shipLength;
 
     context[gridIndex].fillStyle = '#444444';
-    
+
     for(i = 0; i < grid[gridIndex].ships.length; i++) {
       ship = grid[gridIndex].ships[i];
 
@@ -204,7 +204,7 @@ var Game = (function() {
       }
     }
   };
-  
+
   /**
    * Draw shot marks on grid (black crosses for missed and red circles for hits)
    * @param {Number} gridIndex
