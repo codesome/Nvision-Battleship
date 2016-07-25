@@ -9,6 +9,10 @@ var entities = new Entities();
 var BattleshipGame = require('./app/game.js');
 var GameStatus = require('./app/gameStatus.js');
 
+//db
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/nvisionBattleship');
+
 var port = 8900;
 
 users = {};
