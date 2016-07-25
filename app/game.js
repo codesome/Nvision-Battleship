@@ -1,6 +1,7 @@
 var Player = require('./player.js');
 var Settings = require('./settings.js');
 var GameStatus = require('./gameStatus.js');
+var User = require('../models/User.js');
 
 /**
  * BattleshipGame constructor
@@ -9,12 +10,35 @@ var GameStatus = require('./gameStatus.js');
  * @param {type} idPlayer2 Socket ID of player 2
  */
 function BattleshipGame(id, idPlayer1, idPlayer2) {
-  this.id = id;
-  this.currentPlayer = Math.floor(Math.random() * 2);
-  this.winningPlayer = null;
-  this.gameStatus = GameStatus.inProgress;
-
-  this.players = [new Player(idPlayer1), new Player(idPlayer2)];
+  var This = this;
+  var d = new Date();
+  User.findOne({email:users[idPlayer1]},function(err,user1){
+    User.findOne({email:users[idPlayer2]},function(err,user2){
+      if(user1 && user2){
+        user1.logs.push({
+          playedWith: user2.username,
+          startTime: d,
+          result: false
+        });
+        user2.logs.push({
+          playedWith: user1.username,
+          startTime: d,
+          result: false
+        });
+        user1.save(function(err){
+          if(err) console.log(err);
+          user2.save(function(err){
+            if(err) console.log(err);
+            This.id = id;
+            This.currentPlayer = Math.floor(Math.random() * 2);
+            This.winningPlayer = null;
+            This.gameStatus = GameStatus.inProgress;
+            This.players = [new Player(idPlayer1), new Player(idPlayer2)];
+          });
+        });
+      }
+    });
+  });
 }
 
 /**
@@ -87,7 +111,7 @@ BattleshipGame.prototype.shoot = function(position) {
       this.gameStatus = GameStatus.gameOver;
       this.winningPlayer = opponent === 0 ? 1 : 0;
     }
-    
+
     return true;
   }
 

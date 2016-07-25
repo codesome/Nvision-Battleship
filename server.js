@@ -11,7 +11,7 @@ var GameStatus = require('./app/gameStatus.js');
 
 var port = 8900;
 
-var users = {};
+users = {};
 userArray = {};
 var gameIdCounter = 1;
 
@@ -68,7 +68,7 @@ passport.use(new FacebookStrategy({
           if (err) {
             return done(err)
           } else {
-            return done(null, newUser) // user shoud have id field
+              return done(null, newUser) // user shoud have id field
           }
         })
       }
@@ -157,7 +157,8 @@ io.on('connection', function(socket) {
   // create user object for additional data
   users[socket.id] = {
     inGame: null,
-    player: null
+    player: null,
+    email: socket.request.session.passport.user
   };
   userArray[socket.request.session.passport.user] = socket.id;
 

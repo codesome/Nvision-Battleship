@@ -16,6 +16,10 @@ var userSchema = new Schema({
 
     playedWith: String, // id
 
+    startTime: Date,
+
+    endTime: Date,
+
     result: Boolean // 'W'==won 'L'==lost 'N'==no_result
 
   }],
