@@ -20,29 +20,16 @@ userArray = {};
 var gameIdCounter = 1;
 
 passport = require('passport')
-// const Strategy = require('passport-local').Strategy
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const expressSession = require('express-session')
+const MongoStore = require('connect-mongo')(expressSession);
 
 var User = require('./models/User.js');
 
 var config = require('./config.js')
-
-passport.serializeUser(function(user, cb){
-  console.log('s')
-  cb(null, user.id)
-})
-passport.deserializeUser(function(id, cb){
-  console.log('d')
-  User.findOne({id:id},function(err,user){
-    if (err) cb(err)
-    else cb(null, user);
-  });
-})
 
 passport.use(new FacebookStrategy({
   clientID: config.facebook.clientID,
@@ -116,8 +103,23 @@ passport.use(new GoogleStrategy({
   });
 }));
 
+passport.serializeUser(function(user, cb){
+  console.log('s')
+  cb(null, user.id)
+})
+passport.deserializeUser(function(id, cb){
+  console.log('d')
+  User.findOne({id:id},function(err,user){
+    if (err) cb(err)
+    else cb(null, user);
+  });
+})
 
-var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID', resave: true, saveUninitialized: true})
+var options = {
+  url: 'mongodb://localhost/nvisionBattleshipSession',
+  autoRemove: 'native'
+}
+var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', store: new MongoStore(options), name: 'sessionID', resave: true, saveUninitialized: true})
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -131,22 +133,22 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-// Facebbok
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
-    console.log('f')
-    res.redirect('/');
-  });
-// Google
-app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    console.log('g')
-    res.redirect('/');
-  });
+app.use('/', function(req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
 app.use('/', require('./routes/index'))
+
+// 404 Handler
+app.use(function(req, res, next) {
+  res.status(404).send('Sorry cant find that!');
+});
+
+// Other errors
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 http.listen(port, function(){
   console.log('listening on *:' + port);

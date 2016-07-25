@@ -1,39 +1,38 @@
 var app = require('express').Router();
 var User = require('../models/User.js');
 
-app.get('/',require('connect-ensure-login').ensureLoggedIn(),function(req,res){
-  User.findOne({id:req.user},function(err,user){
-    if(user){
+app.get('/',require('connect-ensure-login').ensureLoggedIn(),function(req,  res, next){
+  User.findOne({id:req.user.id},function(err, user){
+    if (err) return next(err)
+    else if(user){
       if(user.username)
         res.render('index');
       else
         res.render('username');
-    } else {
-      res.redirect('/login');
     }
   });
 });
 
-app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),function(req,res){
-  User.findOne({id:req.user},function(err,user){
-    if(user){
+app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),function(req, res, err){
+  User.findOne({id:req.user.id},function(err, user){
+    if (err) return next(err);
+    else if(user){
       if(user.username) res.send('already updated with a username');
       else {
         var username = req.body.username;
         User.findOne({username:username},function(err,u){
-          if(u){
+          if (err) return next(err)
+          else if(u){
             res.send('exists');
           } else {
             user.username = username;
             user.save(function(err){
-              if(err) console.log(err);
-              res.redirect('/');
+              if(err) return next(err);
+              else res.redirect('/');
             });
           }
         });
       }
-    } else {
-      res.redirect('/login');
     }
   });
 });
@@ -62,10 +61,14 @@ app.get('/login', function(req, res) {
   else res.render('login');
 });
 
-app.post('/login', passport.authenticate('local', {
-  successReturnToOrRedirect: '/',
-  failureRedirect: '/login'
-}), function(req, res) {
+// Facebbok
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
+  res.redirect('/');
+});
+// Google
+app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
   res.redirect('/');
 });
 
