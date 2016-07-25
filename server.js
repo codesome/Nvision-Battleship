@@ -28,10 +28,22 @@ var User = require('./models/User.js');
 
 var config = require('./config.js')
 
+passport.serializeUser(function(user, cb){
+  console.log('s')
+  cb(null, user.id)
+})
+passport.deserializeUser(function(id, cb){
+  console.log('d')
+  User.findOne({id:id},function(err,user){
+    if (err) cb(err)
+    else cb(null, user);
+  });
+})
+
 passport.use(new FacebookStrategy({
   clientID: config.facebook.clientID,
   clientSecret: config.facebook.clientSecret,
-  callbackURL: '/auth/facebook/callback',
+  callbackURL: 'http://localhost:8900/auth/facebook/callback',
   profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
   console.log(profile);
@@ -67,7 +79,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: config.google.clientID,
     clientSecret: config.google.clientSecret,
-    callbackURL: '/auth/google/callback'
+    callbackURL: 'http://localhost:8900/auth/google/callback'
   },
   function(token, refreshToken, profile, done) {
     console.log(profile);
@@ -99,20 +111,13 @@ passport.use(new GoogleStrategy({
   });
 }));
 
-passport.serializeUser(function(user, cb){
-  cb(null, user.id)
-})
-passport.deserializeUser(function(id, cb){
-  User.findOne({id:id},function(err,user){
-    cb(null, user);
-  });
-})
 
-var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID', resave: false, saveUninitialized: false})
+var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID', resave: true, saveUninitialized: true})
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(require('morgan')('combined'))
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -120,8 +125,22 @@ app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-app.disable('x-powered-by');
 
+
+// Facebbok
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+    console.log('f')
+    res.redirect('/');
+  });
+// Google
+app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    console.log('g')
+    res.redirect('/');
+  });
 app.use('/', require('./routes/index'))
 
 http.listen(port, function(){

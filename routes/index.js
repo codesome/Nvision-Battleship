@@ -36,16 +36,6 @@ app.post('/login', passport.authenticate('local', {
   res.redirect('/');
 });
 
-// Facebbok
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' }));
-
-// Google
-app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect('/');
-});
-
 // Logout
 app.get('/logout', function(req, res) {
   req.logout();
