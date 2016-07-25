@@ -33,10 +33,11 @@ passport.use(new FacebookStrategy({
   clientSecret: config.facebook.clientSecret,
   callbackURL: '/auth/facebook/callback'
 }, function(accessToken, refreshToken, profile, done) {
+  console.log(profile);
   // TODO Store in database
   process.nextTick(function() {
     User.findOne({
-      'facebook.id': profile.id
+      'id': profile.emails[0].value
     }, function(err, user) {
       if (err)
         return done(err);
@@ -44,6 +45,7 @@ passport.use(new FacebookStrategy({
         return done(null, user)
       } else {
         var newUser = new User();
+        newUser.id = profile.emails[0].value;
         newUser.facebook.id = profile.id;
         newUser.facebook.token = accessToken;
         newUser.facebook.displayName = profile.displayName;
@@ -67,9 +69,10 @@ passport.use(new GoogleStrategy({
     callbackURL: '/auth/google/callback'
   },
   function(token, refreshToken, profile, done) {
+    console.log(profile);
     process.nextTick(function() {
       User.findOne({
-        'google.id': profile.id
+        'id': profile.emails[0].value
       }, function(err, user) {
         if (err) {
           return done(err)
@@ -77,6 +80,7 @@ passport.use(new GoogleStrategy({
           return done(null, user)
         } else {
           var newUser = new User();
+          newUser.id = profile.emails[0].value;
           newUser.google.id = profile.id;
           newUser.google.token = token;
           newUser.google.displayName = profile.displayName;
@@ -95,10 +99,12 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser(function(user, cb){
-  cb(null, user)
+  cb(null, user.id)
 })
-passport.deserializeUser(function(user, cb){
-  cb(null, user)
+passport.deserializeUser(function(id, cb){
+  User.findOne({id:id},function(err,user){
+    cb(null, user);
+  });
 })
 
 var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', name: 'sessionID', resave: false, saveUninitialized: false})
