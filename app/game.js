@@ -12,19 +12,21 @@ var User = require('../models/User.js');
 function BattleshipGame(id, idPlayer1, idPlayer2) {
   var This = this;
   var d = new Date();
-  User.findOne({email:users[idPlayer1]},function(err,user1){
-    User.findOne({email:users[idPlayer2]},function(err,user2){
+  User.findOne({id:users[idPlayer1]},function(err,user1){
+    User.findOne({id:users[idPlayer2]},function(err,user2){
       if(user1 && user2){
         user1.logs.push({
           playedWith: user2.username,
           startTime: d,
           result: false
         });
+        user1.gamesPlayed++;
         user2.logs.push({
           playedWith: user1.username,
           startTime: d,
           result: false
         });
+        user2.gamesPlayed++;
         user1.save(function(err){
           if(err) console.log(err);
           user2.save(function(err){
@@ -86,8 +88,8 @@ BattleshipGame.prototype.switchPlayer = function() {
  */
 BattleshipGame.prototype.abortGame = function(player) {
   // give win to opponent
-  this.gameStatus = GameStatus.gameOver;
   this.winningPlayer = player === 0 ? 1 : 0;
+  this.endGame();
 }
 
 /**
@@ -108,8 +110,8 @@ BattleshipGame.prototype.shoot = function(position) {
 
     // Check if game over
     if(this.players[opponent].getShipsLeft() <= 0) {
-      this.gameStatus = GameStatus.gameOver;
       this.winningPlayer = opponent === 0 ? 1 : 0;
+      this.endGame();
     }
 
     return true;
@@ -143,6 +145,45 @@ BattleshipGame.prototype.getGrid = function(player, hideShips) {
     shots: this.players[player].shots,
     ships: hideShips ? this.players[player].getSunkShips() : this.players[player].ships
   };
+};
+
+/**
+ * Ends the game
+ */
+BattleshipGame.prototype.endGame = function() {
+  var This = this;
+  var d = new Date();
+  User.findOne({id:This.getWinnerId()},function(err,winner){
+    User.findOne({id:This.getLoserId()},function(err,loser){
+      if(winner && loser) {
+        var loserName = loser.username;
+        var winnerName = winner.username;
+        for(var i=0 ; i<winner.logs.length ; i++){
+          if(winner.logs[i].playedWith == loserName){
+            winner.logs[i].result = true;
+            winner.logs[i].endTime = d;
+            break;
+          }
+        }
+        for(var i=0 ; i<loser.logs.length ; i++){
+          if(loser.logs[i].playedWith == winnerName){
+            loser.logs[i].result = true;
+            loser.logs[i].endTime = d;
+            break;
+          }
+        }
+        winner.gamesWon++;
+        winner.save(function(err){
+          if(err) console.log(err);
+          loser.save(function(err){
+            if(err) console.log(err);
+            This.gameStatus = GameStatus.gameOver;
+            return;
+          });
+        });
+      }
+    });
+  });
 };
 
 module.exports = BattleshipGame;

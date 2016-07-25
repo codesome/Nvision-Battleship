@@ -64,6 +64,8 @@ passport.use(new FacebookStrategy({
         newUser.facebook.displayName = profile.displayName;
         newUser.facebook.profileUrl = profile.profileUrl;
         newUser.facebook.email = profile.emails[0].value;
+        newUser.gamesPlayed = 0;
+        newUser.gamesWon = 0;
         newUser.save(function(err) {
           if (err) {
             return done(err)
@@ -99,6 +101,8 @@ passport.use(new GoogleStrategy({
           newUser.google.displayName = profile.displayName;
           newUser.google.email = profile.emails[0].value;
           newUser.google.profileUrl = profile._json.url;
+          newUser.gamesPlayed = 0;
+          newUser.gamesWon = 0;
           newUser.save(function(err) {
             if (err) {
               return done(err)
