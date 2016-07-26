@@ -16,8 +16,9 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
   this.gameStatus = GameStatus.inProgress;
   this.players = [new Player(idPlayer1), new Player(idPlayer2)];
   var d = new Date();
-  User.findOne({id:users[idPlayer1]},function(err,user1){
-    User.findOne({id:users[idPlayer2]},function(err,user2){
+  User.findOne({id:users[idPlayer1].email},function(err,user1){
+    User.findOne({id:users[idPlayer2].email},function(err,user2){
+
       if(user1 && user2){
         user1.logs.push({
           playedWith: user2.username,
@@ -87,8 +88,8 @@ BattleshipGame.prototype.switchPlayer = function() {
  */
 BattleshipGame.prototype.abortGame = function(player) {
   // give win to opponent
+  this.gameStatus = GameStatus.gameOver;
   this.winningPlayer = player === 0 ? 1 : 0;
-  this.endGame();
 }
 
 /**
@@ -109,6 +110,7 @@ BattleshipGame.prototype.shoot = function(position) {
 
     // Check if game over
     if(this.players[opponent].getShipsLeft() <= 0) {
+      this.gameStatus = GameStatus.gameOver;
       this.winningPlayer = opponent === 0 ? 1 : 0;
       this.endGame();
     }
@@ -149,34 +151,29 @@ BattleshipGame.prototype.getGrid = function(player, hideShips) {
 /**
  * Ends the game
  */
-BattleshipGame.prototype.endGame = function() {
+BattleshipGame.prototype.endGame = function(params) {
   var This = this;
   var d = new Date();
   This.gameStatus = GameStatus.gameOver;
-  User.findOne({id:This.getWinnerId()},function(err,winner){
-    User.findOne({id:This.getLoserId()},function(err,loser){
+  console.log(This.getWinnerId());
+  console.log(This.getLoserId());
+  User.findOne({id:users[This.getWinnerId()].email},function(err,winner){
+    User.findOne({id:users[This.getLoserId()].email},function(err,loser){
       if(winner && loser) {
-        var loserName = loser.username;
-        var winnerName = winner.username;
-        for(var i=0 ; i<winner.logs.length ; i++){
-          if(winner.logs[i].playedWith == loserName){
-            winner.logs[i].result = true;
-            winner.logs[i].endTime = d;
-            break;
-          }
-        }
-        for(var i=0 ; i<loser.logs.length ; i++){
-          if(loser.logs[i].playedWith == winnerName){
-            loser.logs[i].result = true;
-            loser.logs[i].endTime = d;
-            break;
-          }
-        }
+        var winnerGamePos = winner.logs.length-1;
+        winner.logs[winnerGamePos].result = true;
+        winner.logs[winnerGamePos].endTime = d;
+        var loserGamePos = loser.logs.length-1;
+        loser.logs[loserGamePos].endTime = d;
         winner.gamesWon++;
         winner.save(function(err){
           if(err) console.log(err); // TODO Handle error
           loser.save(function(err){
             if(err) console.log(err); // TODO Handle error
+            if(params){
+              if(params.users) delete users[params.users];
+              if(params.userArray) delete userArray[params.userArray];
+            }
             return;
           });
         });

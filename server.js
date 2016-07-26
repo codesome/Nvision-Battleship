@@ -104,11 +104,11 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser(function(user, cb){
-  console.log('s')
+  //console.log('s')
   cb(null, user.id)
 })
 passport.deserializeUser(function(id, cb){
-  console.log('d')
+  //console.log('d')
   User.findOne({id:id},function(err,user){
     if (err) cb(err)
     else cb(null, user);
@@ -159,7 +159,7 @@ io.use(function(socket, next) {
 });
 
 io.on('connection', function(socket) {
-  console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
+  //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
   if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
   // create user object for additional data
   users[socket.id] = {
@@ -177,7 +177,7 @@ io.on('connection', function(socket) {
    */
   socket.on('chat', function(msg) {
     if(users[socket.id].inGame !== null && msg) {
-      console.log((new Date().toISOString()) + ' Chat message from ' + socket.id + ': ' + msg);
+      //console.log((new Date().toISOString()) + ' Chat message from ' + socket.id + ': ' + msg);
 
       // Send message to opponent
       socket.broadcast.to('game' + users[socket.id].inGame.id).emit('chat', {
@@ -222,7 +222,7 @@ io.on('connection', function(socket) {
   socket.on('leave', function() {
     if(users[socket.id].inGame !== null) {
       leaveGame(socket);
-
+      // TODO update database
       socket.join('waiting room');
       joinWaitingPlayers();
     }
@@ -232,10 +232,10 @@ io.on('connection', function(socket) {
    * Handle client disconnect
    */
   socket.on('disconnect', function() {
-    console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
+    //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
     // console.log(socket.request.session.passport.user)
     leaveGame(socket);
-
+    // TODO update database
     delete users[socket.id];
     delete userArray[socket.request.session.passport.user]
   });
@@ -270,7 +270,7 @@ function joinWaitingPlayers() {
     io.to(players[0].id).emit('update', game.getGameState(0, 0));
     io.to(players[1].id).emit('update', game.getGameState(1, 1));
 
-    console.log((new Date().toISOString()) + " " + players[0].id + " and " + players[1].id + " have joined game ID " + game.id);
+    //console.log((new Date().toISOString()) + " " + players[0].id + " and " + players[1].id + " have joined game ID " + game.id);
   }
 }
 
@@ -280,7 +280,7 @@ function joinWaitingPlayers() {
  */
 function leaveGame(socket) {
   if(users[socket.id].inGame !== null) {
-    console.log((new Date().toISOString()) + ' ID ' + socket.id + ' left game ID ' + users[socket.id].inGame.id);
+    //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' left game ID ' + users[socket.id].inGame.id);
 
     // Notifty opponent
     socket.broadcast.to('game' + users[socket.id].inGame.id).emit('notification', {
@@ -308,7 +308,7 @@ function leaveGame(socket) {
  */
 function checkGameOver(game) {
   if(game.gameStatus === GameStatus.gameOver) {
-    console.log((new Date().toISOString()) + ' Game ID ' + game.id + ' ended.');
+    //console.log((new Date().toISOString()) + ' Game ID ' + game.id + ' ended.');
     io.to(game.getWinnerId()).emit('gameover', true);
     io.to(game.getLoserId()).emit('gameover', false);
   }
