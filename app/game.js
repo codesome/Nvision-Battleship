@@ -10,12 +10,11 @@ var User = require('../models/User.js');
  * @param {type} idPlayer2 Socket ID of player 2
  */
 function BattleshipGame(id, idPlayer1, idPlayer2) {
-  var This = this;
-  This.id = id;
-  This.currentPlayer = Math.floor(Math.random() * 2);
-  This.winningPlayer = null;
-  This.gameStatus = GameStatus.inProgress;
-  This.players = [new Player(idPlayer1), new Player(idPlayer2)];
+  this.id = id;
+  this.currentPlayer = Math.floor(Math.random() * 2);
+  this.winningPlayer = null;
+  this.gameStatus = GameStatus.inProgress;
+  this.players = [new Player(idPlayer1), new Player(idPlayer2)];
   var d = new Date();
   User.findOne({id:users[idPlayer1]},function(err,user1){
     User.findOne({id:users[idPlayer2]},function(err,user2){
@@ -36,7 +35,6 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
           if(err) console.log(err); // TODO Handle error
           user2.save(function(err){
             if(err) console.log(err); // TODO Handle error
-            // Removed
           });
         });
       }
@@ -179,7 +177,6 @@ BattleshipGame.prototype.endGame = function() {
           if(err) console.log(err); // TODO Handle error
           loser.save(function(err){
             if(err) console.log(err); // TODO Handle error
-            // Removed this
             return;
           });
         });
