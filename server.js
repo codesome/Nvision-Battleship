@@ -221,7 +221,7 @@ io.on('connection', function(socket) {
    */
   socket.on('leave', function() {
     if(users[socket.id].inGame !== null) {
-      leaveGame(socket);
+      leaveGame(socket,false);
       // TODO update database
       socket.join('waiting room');
       joinWaitingPlayers();
@@ -234,10 +234,10 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
     // console.log(socket.request.session.passport.user)
-    leaveGame(socket);
+    leaveGame(socket,true);
     // TODO update database
     delete users[socket.id];
-    delete userArray[socket.request.session.passport.user]
+    delete userArray[socket.request.session.passport.user];
   });
 
   joinWaitingPlayers();
@@ -278,24 +278,31 @@ function joinWaitingPlayers() {
  * Leave user's game
  * @param {type} socket
  */
-function leaveGame(socket) {
-  if(users[socket.id].inGame !== null) {
-    //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' left game ID ' + users[socket.id].inGame.id);
+function leaveGame(socket,disconnected) {
+  var game = users[socket.id].inGame;
+  if(game !== null) {
+    //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' left game ID ' + game.id);
 
     // Notifty opponent
-    socket.broadcast.to('game' + users[socket.id].inGame.id).emit('notification', {
+    socket.broadcast.to('game' + game.id).emit('notification', {
       message: 'Opponent has left the game'
     });
 
-    if(users[socket.id].inGame.gameStatus !== GameStatus.gameOver) {
+    if(game.gameStatus !== GameStatus.gameOver) {
       // Game is unfinished, abort it.
-      users[socket.id].inGame.abortGame(users[socket.id].player);
-      checkGameOver(users[socket.id].inGame);
+      game.abortGame(users[socket.id].player);
+      if(disconnected){
+        game.endGame({
+          winnerId: users[game.getWinnerId()].email,
+          loserId: users[game.getLoserId()].email
+        });
+      }
+      checkGameOver(game);
     }
 
-    socket.leave('game' + users[socket.id].inGame.id);
+    socket.leave('game' + game.id);
 
-    users[socket.id].inGame = null;
+    game = null;
     users[socket.id].player = null;
 
     io.to(socket.id).emit('leave');

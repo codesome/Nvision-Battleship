@@ -155,10 +155,16 @@ BattleshipGame.prototype.endGame = function(params) {
   var This = this;
   var d = new Date();
   This.gameStatus = GameStatus.gameOver;
-  console.log(This.getWinnerId());
-  console.log(This.getLoserId());
-  User.findOne({id:users[This.getWinnerId()].email},function(err,winner){
-    User.findOne({id:users[This.getLoserId()].email},function(err,loser){
+  var winnerId,loserId;
+  if(params){
+    winnerId = params.winnerId;
+    loserId = params.loserId;
+  } else {
+    winnerId = users[This.getWinnerId()].email;
+    loserId = users[This.getLoserId()].email;
+  }
+  User.findOne({id:winnerId},function(err,winner){
+    User.findOne({id:loserId},function(err,loser){
       if(winner && loser) {
         var winnerGamePos = winner.logs.length-1;
         winner.logs[winnerGamePos].result = true;
@@ -170,11 +176,6 @@ BattleshipGame.prototype.endGame = function(params) {
           if(err) console.log(err); // TODO Handle error
           loser.save(function(err){
             if(err) console.log(err); // TODO Handle error
-            if(params){
-              if(params.users) delete users[params.users];
-              if(params.userArray) delete userArray[params.userArray];
-            }
-            return;
           });
         });
       }
