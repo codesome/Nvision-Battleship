@@ -124,7 +124,7 @@ var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', store: new Mo
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(require('morgan')('combined'))
+app.use(require('morgan')('dev'))
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -159,7 +159,7 @@ io.use(function(socket, next) {
 });
 
 io.on('connection', function(socket) {
-  //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
+  // console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
   if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
   // create user object for additional data
   users[socket.id] = {

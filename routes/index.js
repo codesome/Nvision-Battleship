@@ -38,7 +38,7 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
 });
 
 app.get('/war', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
-  if (userArray[req.user.username]) return res.send('Mutiple connections are not allowed.')
+  if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
   res.render('game')
 });
 
