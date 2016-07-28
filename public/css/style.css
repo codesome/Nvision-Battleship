@@ -1,0 +1,333 @@
+/*
+Author:Vijayan PP
+Template:Yomer- Coming Soon Website
+*/
+
+/*Basic Styles*/
+
+html,body
+{
+height:100%;
+}
+
+body
+{
+background:#222;
+color:#222;
+font-weight:200;
+font: 13px/1.5 Lato, "Century Gothic", "Trebuchet MS", Helvetica, sans-serif;
+-webkit-font-smoothing:antialiased;
+
+}
+a
+{
+color:#89d460;
+text-decoration:none;
+transition:all 0.125 ease-in-out 0s;
+-webkit-transition:all 0.125s ease-in-out 0s;
+-moz-transition:all 0.125s ease-in-out 0s;
+-ms-transition:all 0.125s ease-in-out 0s;
+-o-transition:all 0.125s ease-in-out 0s;
+}
+
+ul, ol {
+margin: 1em 0 2em 0;
+padding: 0 0 0 20px;
+}
+a:hover
+{
+color:#89d460;
+}
+
+a
+{
+text-decoration:none;
+color:#f77c03;
+}
+a:hover
+{
+color:#ccc;
+
+}
+.nav > .menu > .btMenu{
+	display: none;
+}
+
+
+a,a:hover,a:focus,a:active
+{
+border:0;
+outline:0;
+text-decoration:none;
+}
+
+/*Typography*/
+.yomer-text-center
+{
+text-align:center;
+}
+
+h2 {
+margin: .25em 0;
+padding: 0;
+font-size: 4.5em;
+font-weight: 300;
+color: #2b2b2b;
+cursor: default;
+}
+
+.wrapper
+{
+width:100%;
+height:auto;
+position:relative;
+box-sizing:border-box;
+
+}
+/*Header*/
+
+
+header
+{
+width:100%;
+position:relative;
+overflow:hidden;
+z-index:0;
+background:url('../img/bg-banner.jpg') no-repeat 50%;
+height:auto;
+background-color:#000 !important;
+height:100vh;
+background-size:cover;
+}
+header>.container
+{
+height:100%;
+position: relative;
+top:100px;
+text-align: center;
+z-index: 1;
+}
+.logo
+{
+position:absolute;
+top:10px;
+left:5%;
+display:block;
+width:152px;
+height:26px;
+line-height:26px;
+pyomering:0px;
+text-indent:-9999em;
+outline:none;
+overflow:hidden;
+z-index:3;
+opacity:1;
+background:url('../img/logo.png') no-repeat;
+}
+.titles
+{
+
+color:#fff;
+min-height:300px;
+height:auto;
+}
+.titles h1
+{
+position: relative;
+text-shadow: 0 1px 2px rgba(0,0,0,.5);
+font-size: 5em;
+font-weight: 100;
+color: #fff;
+cursor: default;
+}
+.subhead
+{
+position:relative;
+}
+.subhead p
+{
+text-shadow: 0 1px 2px rgba(0,0,0,.5);
+font-size: 18px;
+font-weight: 100;
+color: #eee;
+cursor: default;
+}
+.buttons
+{
+position:relative;
+margin:0 auto;
+width:100%;
+min-width:200px;
+min-height:41px;
+}
+
+.buttons form
+{
+display: inline-block;
+margin: 0;
+padding: 0;
+}
+.buttons button
+{
+-webkit-transition: all .3s ease;
+-moz-transition: all .3s ease;
+transition: all .3s ease;
+border-radius: 3px;
+margin: 0 5px;
+cursor: pointer;
+}
+
+.form-submit
+{
+
+width: 200px;
+height: 41px;
+line-height: 51px;
+outline: none;
+background-repeat: no-repeat;
+background-position: 0 0;
+border: none;
+background-size:200px 41px;
+}
+
+
+
+.buttons button:hover {
+-webkit-transform: translate3d(0,-8px,0);
+-moz-transform: translate3d(0,-8px,0);
+-ms-transform: translate3d(0,-8px,0);
+-o-transform: translate3d(0,-8px,0);
+transform: translate3d(0,-8px,0);
+}
+
+
+
+
+
+
+
+
+
+.form-submit.googleplus {
+background-image: url('../img/btn-googleplus.png');
+}
+.form-submit.facebook {
+background-image: url('../img/btn-facebook.png');
+}
+.logos
+{
+width:100%;
+padding-top:100px;
+padding-bottom:80px;
+
+}
+.logos img
+{
+width:100%;
+}
+
+.animate {
+-webkit-animation-duration: 1s;
+animation-duration: 1s;
+-webkit-animation-fill-mode: both;
+animation-fill-mode: both;
+-webkit-animation-timing-function: linear;
+animation-timing-function: linear;
+animation-iteration-count: infinite;
+-webkit-animation-iteration-count: infinite;
+}
+/*..................................................ABOUT US...................*/
+.aboutus
+{
+width:100%;
+background-color:#fff;
+position:relative;
+overflow:hidden;
+}
+.aboutus >.container
+{
+padding-top:100px;
+padding-bottom:100px;
+}
+.bigtext {
+font-weight: 100;
+font-size: 1.5em;
+line-height: 1.5em;
+color: #878787;
+margin-bottom:80px;
+}
+
+small
+{
+color:#ccc;
+}
+
+/*..................................................OUR MISSION...................*/
+.ourmission
+{
+width:100%;
+position:relative;
+overflow:hidden;
+background:url('../img/bg-testmonial-01.jpg') no-repeat;
+background-attachment:fixed;
+background-size:cover;
+background-color:#fff;
+}
+.ourmission >.container
+{
+padding-top:110px;
+padding-bottom:110px;
+}
+.ourmission h3
+{
+color:#fff;
+}
+
+/*----------------------------------------------SOCIAL-------------------------*/
+
+.social
+{
+width:100%;
+position:relative;
+overflow:hidden;
+background:#000;
+border-top:1px dashed #eee;
+}
+.social >.container
+{
+padding-top:50px;
+padding-bottom:50px;
+}
+.social_icons ul {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+.social_icons li {
+	display: inline-block;
+	list-style-type: none;
+	padding-left:30px;
+}
+.social_icons a {
+	display: block;
+	width: 35px;
+	height: 35px;
+	margin: 0;
+	font-size: 18px;
+	line-height: 35px !important;
+	text-decoration: none;
+	text-align: center;
+	color: #919191 !important;
+	background: #fff;
+	border-radius: 4px;
+}
+.social_icons a:hover i {
+	-webkit-border-radius: 100%;
+	-moz-border-radius: 100%;
+	border-radius: 100%;
+	color: #f77c03;
+	transform: rotate(360deg);
+	-ms-transform: rotate(360deg);
+	-webkit-transform: rotate(360deg);
+	-webkit-transition: 0.4s ease-in-out;
+}
