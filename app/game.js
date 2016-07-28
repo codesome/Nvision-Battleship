@@ -2,6 +2,7 @@ var Player = require('./player.js');
 var Settings = require('./settings.js');
 var GameStatus = require('./gameStatus.js');
 var User = require('../models/User.js');
+var games = require('../models/games.js');
 
 /**
  * BattleshipGame constructor
@@ -11,11 +12,19 @@ var User = require('../models/User.js');
  */
 function BattleshipGame(id, idPlayer1, idPlayer2) {
   this.id = id;
+  this.gameid = ''+idPlayer1+idPlayer2;
   this.currentPlayer = Math.floor(Math.random() * 2);
   this.winningPlayer = null;
   this.gameStatus = GameStatus.inProgress;
   this.players = [new Player(idPlayer1), new Player(idPlayer2)];
   var d = new Date();
+  games({
+    gameid: this.gameid,
+    p1Id: users[this.currentPlayer==0 ? idPlayer1 : idPlayer2].email,
+    p2Id: users[this.currentPlayer==0 ? idPlayer2 : idPlayer1].email
+  }).save(function(err){
+    if(err) console.log(err);
+  });;
   User.findOne({id:users[idPlayer1].email},function(err,user1){
     User.findOne({id:users[idPlayer2].email},function(err,user2){
 
@@ -103,10 +112,26 @@ BattleshipGame.prototype.shoot = function(position) {
 
   if(this.players[opponent].shots[gridIndex] === 0 && this.gameStatus === GameStatus.inProgress) {
     // Square has not been shot at yet.
+    var gameshot = {
+      player: (opponent+1)%2,
+      x: position.x,
+      y: position.y
+    };
     if(!this.players[opponent].shoot(gridIndex)) {
       // Miss
       this.switchPlayer();
+      gameshot['type'] = 'miss';
+    } else {
+      gameshot['type'] = 'hit';
     }
+    games.findOne({gameid:this.gameid},function(err,game){
+      if(game){
+        game.shots.push(gameshot);
+        game.save(function(err){
+          if(err) console.log(err);
+        });
+      }
+    });
 
     // Check if game over
     if(this.players[opponent].getShipsLeft() <= 0) {
