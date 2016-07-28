@@ -1,102 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>NodeBattleship</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/site.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NodeBattleship</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<div class="container">
+  <div class="container">
     <div class="row vertical-center-row">
-        <div class="col-md-12">
-
-            <!-- Disconnected from server -->
-            <div id="disconnected">
-                <div class="row">
-                    <div class="col-sm-4 col-sm-offset-4 text-center">
-                        <div class="alert alert-danger">
-                            <p>Not connected to server.</p>
-                        </div>
-                    </div>
-                </div>
+      <!-- Disconnected from server -->
+      <div id="disconnected">
+        <div class="row">
+          <div class="col-sm-4 col-sm-offset-4 text-center">
+            <div class="alert alert-danger">
+              <p>Not connected to server.</p>
             </div>
-
-            <!-- Waiting room -->
-            <div id="waiting-room" style="display:none;">
-                <div class="row">
-                    <div class="col-sm-4 col-sm-offset-4 text-center">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Waiting Room</div>
-                            <div class="panel-body">
-                                <p>You are connected to the server.</p>
-                                <p>Waiting for another player...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Game -->
-            <div id="game" style="display:none;">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Battleship Game #<span id="game-number"></span></div>
-                            <div class="panel-body">
-
-                                <!-- Player grids -->
-                                <div class="row">
-                                    <div class="col-md-6 player-grid text-center">
-                                        <h3>You</h3>
-                                        <canvas id="canvas-grid1" width="361" height="361">Browser does not support canvas.</canvas>
-                                    </div>
-                                    <div class="col-md-6 player-grid text-center">
-                                        <h3>Opponent</h3>
-                                        <canvas id="canvas-grid2" width="361" height="361">Browser does not support canvas.</canvas>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                            <ul class="list-group">
-                                <!-- Status -->
-                                <li class="list-group-item text-center" id="turn-status"></li>
-
-                                <!-- Chat messages -->
-                                <li class="list-group-item" id="messages-list">
-                                    <ul id="messages"></ul>
-                                </li>
-
-                                <!-- Send chat message form -->
-                                <li class="list-group-item">
-                                    <form id="message-form" action="">
-                                        <div class="input-group">
-                                        <input id="message" class="form-control" autocomplete="off" />
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-primary">Send Message</button>
-                                        </div>
-                                        </div>
-                                    </form>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
-    </div>
-        <div class="col-xs-12 text-right"><a class="btn btn-default" href="/logout">Logout</a></div>
-</div>
+      </div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="/socket.io/socket.io.js" charset="utf-8"></script>
-<script type="text/javascript" src="/js/game.js"></script>
-<script type="text/javascript" src="/js/client.js"></script>
+      <!-- Waiting room -->
+      <div id="waiting-room" style="display:none;">
+        <div class="row">
+          <div class="col-sm-4 col-sm-offset-4 text-center">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Waiting Room</div>
+              <div class="panel-body">
+                <p>Searching for another player ...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game -->
+      <div id="game" style="display:none;">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-primary">
+              <%# <div class="panel-heading">Battleship Game #<span id="game-number"></span></div>%>
+              <div class="panel-body">
+
+                <!-- Player grids -->
+                <div class="row">
+                  <div class="col-md-6 player-grid text-center">
+                    <h3>You</h3>
+                    <canvas id="canvas-grid1" width="361" height="361">Browser does not support canvas.</canvas>
+                  </div>
+                  <div class="col-md-6 player-grid text-center">
+                    <h3>Opponent</h3>
+                    <canvas id="canvas-grid2" width="361" height="361">Browser does not support canvas.</canvas>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="text-center" id="turn-status"></div>
+              <%# <ul class="list-group">
+                <!-- Status -->
+                <li class="list-group-item text-center" id="turn-status"></li>
+
+                <!-- Chat messages -->
+                <li class="list-group-item" id="messages-list">
+                  <ul id="messages"></ul>
+                </li>
+
+                <!-- Send chat message form -->
+                <li class="list-group-item">
+
+                </li>
+              </ul>%>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="container" id="chatbox" style="display: none;">
+    <div class="row chat-window" id="chat_window_1" style="margin-left:10px;">
+      <div class="col-xs-offset-7 col-xs-5 col-md-offset-8 col-md-4">
+          <div class="col-xs-12 col-md-12">
+          	<div class="panel panel-default">
+                  <div class="panel-heading top-bar">
+                      <div class="col-md-8 col-xs-8">
+                          <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat</h3>
+                      </div>
+                      <div class="col-md-4 col-xs-4" style="text-align: right;">
+                          <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                      </div>
+                  </div>
+                  <div class="panel-body msg_container_base" id="messages-list" style="height : 500px">
+                    <div id="messages">
+
+                    </div>
+                  </div>
+
+                  <div class="panel-footer">
+                    <form id="message-form" action="">
+                      <div class="input-group">
+                        <input id="message" class="form-control input-sm chat_input" autocomplete="off" placeholder="Write your message here..." />
+                        <span class="input-group-btn">
+                          <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+      		</div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+    <%# <div class="col-xs-12 text-right"><a class="btn btn-default" href="/logout">Logout</a></div>%>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/js/game.js"></script>
+  <script type="text/javascript" src="/js/client.js"></script>
+  <script type="text/javascript">
+$(document).on('click', '.panel-heading span.icon_minim', function (e) {
+  var $this = $(this);
+  if (!$this.hasClass('panel-collapsed')) {
+      $this.parents('.panel').find('.panel-body').slideUp();
+      $this.addClass('panel-collapsed');
+      $this.removeClass('glyphicon-minus').addClass('glyphicon-plus');
+  } else {
+      $this.parents('.panel').find('.panel-body').slideDown();
+      $this.removeClass('panel-collapsed');
+      $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
+  }
+});
+$(document).on('focus', '.panel-footer input.chat_input', function (e) {
+  var $this = $(this);
+  if ($('#minim_chat_window').hasClass('panel-collapsed')) {
+      $this.parents('.panel').find('.panel-body').slideDown();
+      $('#minim_chat_window').removeClass('panel-collapsed');
+      $('#minim_chat_window').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+  }
+});
+$(document).on('click', '#new_chat', function (e) {
+  var size = $( ".chat-window:last-child" ).css("margin-left");
+   size_total = parseInt(size) + 400;
+  alert(size_total);
+  var clone = $( "#chat_window_1" ).clone().appendTo( ".container" );
+  clone.css("margin-left", size_total);
+});
+
+  </script>
 </body>
 </html>

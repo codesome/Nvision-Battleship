@@ -17,6 +17,7 @@ $(function() {
     console.log('Disconnected from server.');
     $('#waiting-room').hide();
     $('#game').hide();
+    $("#chatbox").hide();
     $('#disconnected').show();
   });
 
@@ -29,6 +30,7 @@ $(function() {
     $('#disconnected').hide();
     $('#waiting-room').hide();
     $('#game').show();
+    $("#chatbox").show();
     $('#game-number').html(gameId);
   })
 
@@ -44,7 +46,34 @@ $(function() {
    * Game chat message
    */
   socket.on('chat', function(msg) {
-    $('#messages').append('<li><strong>' + msg.name + ':</strong> ' + msg.message + '</li>');
+    if (msg.name == "Me") {
+      $('#messages').append(`
+        <div class="row msg_container base_sent">
+            <div class="col-md-10 col-xs-10">
+                <div class="messages msg_sent">
+                    <p>${msg.message}</p>
+                </div>
+            </div>
+            <div class="col-md-2 col-xs-2 avatar">
+                <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+            </div>
+        </div>
+        `);
+    } else {
+      $('#messages').append(`
+        <div class="row msg_container base_receive">
+            <div class="col-md-2 col-xs-2 avatar">
+                <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+            </div>
+            <div class="col-md-10 col-xs-10">
+                <div class="messages msg_receive">
+                    <p>${msg.message}</p>
+                </div>
+            </div>
+        </div>
+        `);
+    }
+    // $('#messages').append('<li><strong>' + msg.name + ':</strong> ' + msg.message + '</li>');
     $('#messages-list').scrollTop($('#messages-list')[0].scrollHeight);
   });
 
@@ -68,6 +97,7 @@ $(function() {
    */
   socket.on('leave', function() {
     $('#game').hide();
+    $("#chatbox").hide();
     $('#waiting-room').show();
   });
 
