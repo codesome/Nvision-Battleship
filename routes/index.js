@@ -42,6 +42,11 @@ app.get('/war!', require('connect-ensure-login').ensureLoggedIn(), function(req,
   res.render('game')
 });
 
+app.get('/u/*', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
+  if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
+  res.render('game')
+});
+
 app.get('/myHistory',require('connect-ensure-login').ensureLoggedIn(),function(req,res){
   if(req.user && req.user._id){
     User.findOne({_id:req.user._id},function(err,user){

@@ -1,4 +1,5 @@
 const path = require('path')
+const url = require('url')
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -37,7 +38,9 @@ passport.use(new FacebookStrategy({
   callbackURL: 'http://localhost:8900/auth/facebook/callback',
   profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
+  console.log(profile)
   process.nextTick(function() {
+    if (!profile.emails) profile.emails = [{value : profile.id}]
     User.findOne({
       'id': profile.emails[0].value
     }, function(err, user) {
@@ -160,7 +163,7 @@ io.use(function(socket, next) {
 
 io.on('connection', function(socket) {
   // console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
-  if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
+  // if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
   // create user object for additional data
   users[socket.id] = {
     inGame: null,
@@ -170,7 +173,10 @@ io.on('connection', function(socket) {
   userArray[socket.request.session.passport.user] = socket.id;
 
   // join waiting room until there are enough players to start a new game
-  socket.join('waiting room');
+
+  var against = url.parse(socket.handshake.headers.referer).pathname;
+  if (against == "/war!") socket.join('waiting room');
+  else socket.join('waiting for someone');
 
   /**
    * Handle chat messages
@@ -241,17 +247,51 @@ io.on('connection', function(socket) {
   });
 
   joinWaitingPlayers();
+  joinWaitingPlayersForSomeone();
 });
 
 /**
  * Create games for players in waiting room
  */
+function joinWaitingPlayersForSomeone() {
+  var players = getClientsInRoom('waiting for someone');
+  var i=0;
+  while (i<players.length) {
+    var player = players[i];
+    var against = url.parse(player.handshake.headers.referer).pathname.substring(3)
+    if (userArray[against]) {
+      var otherPlayer = io.sockets.connected[userArray[against]]
+      // 2 player waiting. Create new game!
+      var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
+      // create new room for this game
+      player.leave('waiting for someone');
+      otherPlayer.leave('waiting for someone');
+      player.join('game' + game.id);
+      otherPlayer.join('game' + game.id);
+
+      users[player.id].player = 0;
+      users[otherPlayer.id].player = 1;
+      users[player.id].inGame = game;
+      users[otherPlayer.id].inGame = game;
+
+      io.to('game' + game.id).emit('join', game.id);
+
+      // send initial ship placements
+      io.to(player.id).emit('update', game.getGameState(0, 0));
+      io.to(otherPlayer.id).emit('update', game.getGameState(1, 1));
+      players = getClientsInRoom('waiting for someone')
+    } else i++;
+  }
+}
+
 function joinWaitingPlayers() {
   var players = getClientsInRoom('waiting room');
 
   if(players.length >= 2) {
     // 2 player waiting. Create new game!
     var game = new BattleshipGame(gameIdCounter++, players[0].id, players[1].id);
+
+
 
     // create new room for this game
     players[0].leave('waiting room');
