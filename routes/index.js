@@ -37,7 +37,7 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
   });
 });
 
-app.get('/war', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
+app.get('/war!', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
   if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
   res.render('game')
 });
@@ -63,12 +63,12 @@ app.get('/login', function(req, res) {
 
 // Facebbok
 app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
   res.redirect('/');
 });
 // Google
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
   res.redirect('/');
 });
 
