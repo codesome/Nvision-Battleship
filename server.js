@@ -255,12 +255,14 @@ io.on('connection', function(socket) {
  */
 function joinWaitingPlayersForSomeone() {
   var players = getClientsInRoom('waiting for someone');
+  var playersWaiting = getClientsInRoom('waiting room');
   var i=0;
   while (i<players.length) {
     var player = players[i];
     var against = url.parse(player.handshake.headers.referer).pathname.substring(3)
     if (userArray[against]) {
       var otherPlayer = io.sockets.connected[userArray[against]]
+      console.log(otherPlayer.rooms)
       // 2 player waiting. Create new game!
       var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
       // create new room for this game

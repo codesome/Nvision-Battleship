@@ -109,7 +109,6 @@ h3 {
 
 /* Chat */
 body {
-  overflow: hidden;
 }
 .chat-window{
     bottom:0;
