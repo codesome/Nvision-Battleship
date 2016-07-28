@@ -22,13 +22,27 @@ var gamesSchema = new Schema({
 
   },
 
-  ships: [{
+  player1ships: [{
 
-    player: Number,
+    x: Number,
 
-    from: String,
+    y: Number,
 
-    to: String
+    size: Number,
+
+    horizontal: Boolean
+
+  }],
+
+  player2ships: [{
+
+    x: Number,
+
+    y: Number,
+
+    size: Number,
+
+    horizontal: Boolean
 
   }],
 
