@@ -79,14 +79,11 @@
       </div>
 
     </div>
-  </div>
-
-
-  <div class="container" id="chatbox" style="display: none;">
-    <div class="row chat-window" id="chat_window_1" style="margin-left:10px;">
+  </div><div class="container" id="chatbox" style="display: none; pointer-events: none">
+    <div class="row chat-window" style="margin-left:10px;padding: 0">
       <div class="col-xs-offset-7 col-xs-5 col-md-offset-8 col-md-4">
           <div class="col-xs-12 col-md-12">
-          	<div class="panel panel-default">
+          	<div class="panel panel-default" style="pointer-events: auto">
                   <div class="panel-heading top-bar">
                       <div class="col-md-8 col-xs-8">
                           <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat</h3>
@@ -115,7 +112,14 @@
           </div>
         </div>
       </div>
+
+
   </div>
+
+
+  <%# <div class="container-fluid" id="chatbox" style="display: none;padding: 0">
+
+  </div>%>
 
     <%# <div class="col-xs-12 text-right"><a class="btn btn-default" href="/logout">Logout</a></div>%>
 
@@ -125,7 +129,7 @@
   <script type="text/javascript" src="/js/game.js"></script>
   <script type="text/javascript" src="/js/client.js"></script>
   <script type="text/javascript">
-$(document).on('click', '.panel-heading span.icon_minim', function (e) {
+$('.panel-heading span.icon_minim').on('click', function (e) {
   var $this = $(this);
   if (!$this.hasClass('panel-collapsed')) {
       $this.parents('.panel').find('.panel-body').slideUp();
@@ -137,7 +141,7 @@ $(document).on('click', '.panel-heading span.icon_minim', function (e) {
       $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
   }
 });
-$(document).on('focus', '.panel-footer input.chat_input', function (e) {
+$('.panel-footer input.chat_input').on('focus', function (e) {
   var $this = $(this);
   if ($('#minim_chat_window').hasClass('panel-collapsed')) {
       $this.parents('.panel').find('.panel-body').slideDown();
@@ -145,14 +149,6 @@ $(document).on('focus', '.panel-footer input.chat_input', function (e) {
       $('#minim_chat_window').removeClass('glyphicon-plus').addClass('glyphicon-minus');
   }
 });
-$(document).on('click', '#new_chat', function (e) {
-  var size = $( ".chat-window:last-child" ).css("margin-left");
-   size_total = parseInt(size) + 400;
-  alert(size_total);
-  var clone = $( "#chat_window_1" ).clone().appendTo( ".container" );
-  clone.css("margin-left", size_total);
-});
-
   </script>
 </body>
 </html>
