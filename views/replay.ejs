@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NodeBattleship</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="container">
+    <div class="row vertical-center-row">
+
+      <!-- Game -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-primary">
+
+              <div class="panel-body">
+                <!-- Player grids -->
+                <div class="row">
+                  <div class="col-md-6 player-grid text-center">
+                    <h3>You</h3>
+                    <canvas id="canvas1" width="361" height="361">Browser does not support canvas.</canvas>
+                  </div>
+                  <div class="col-md-6 player-grid text-center">
+                    <h3>Opponent</h3>
+                    <canvas id="canvas2" width="361" height="361">Browser does not support canvas.</canvas>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/replay.js"></script>
+
+  <script>
+  $(document).ready(function(){
+    drawSquares(document.getElementById('canvas1').getContext('2d'));
+    drawSquares(document.getElementById('canvas2').getContext('2d'));
+  });
+  </script>
+
+</body>
+
+</html>

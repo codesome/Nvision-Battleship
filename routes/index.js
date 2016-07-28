@@ -83,4 +83,8 @@ app.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
+app.get('/replay',function(req,res){
+  res.render('replay');
+});
+
 module.exports = app;
