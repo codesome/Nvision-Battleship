@@ -88,7 +88,6 @@ Player.prototype.createRandomShips = function() {
     if(!this.placeShipRandom(ship, shipIndex)) {
       return false;
     }
-
     this.ships.push(ship);
   }
 
@@ -191,7 +190,6 @@ Player.prototype.createShips = function() {
       this.shipGrid[gridIndex] = shipIndex;
       gridIndex += ship.horizontal ? 1 : Settings.gridCols;
     }
-
     this.ships.push(ship);
   }
 };

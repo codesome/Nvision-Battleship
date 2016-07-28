@@ -18,13 +18,35 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
   this.gameStatus = GameStatus.inProgress;
   this.players = [new Player(idPlayer1), new Player(idPlayer2)];
   var d = new Date();
+
+  var player1ships = [] , player2ships = [];
+  var allShips = this.players[0].ships;
+  for(var i=0 ; i <allShips.length ; i++){
+    player1ships.push({
+      x: allShips[i].x,
+      y: allShips[i].y,
+      size: allShips[i].size,
+      horizontal: allShips[i].horizontal
+    });
+  }
+  allShips = this.players[1].ships;
+  for(var i=0 ; i <allShips.length ; i++){
+    player2ships.push({
+      x: allShips[i].x,
+      y: allShips[i].y,
+      size: allShips[i].size,
+      horizontal: allShips[i].horizontal
+    });
+  }
   games({
     gameid: this.gameid,
     p1Id: users[this.currentPlayer==0 ? idPlayer1 : idPlayer2].email,
-    p2Id: users[this.currentPlayer==0 ? idPlayer2 : idPlayer1].email
+    p2Id: users[this.currentPlayer==0 ? idPlayer2 : idPlayer1].email,
+    player1ships: player1ships,
+    player2ships: player2ships
   }).save(function(err){
     if(err) console.log(err);
-  });;
+  });
   User.findOne({id:users[idPlayer1].email},function(err,user1){
     User.findOne({id:users[idPlayer2].email},function(err,user2){
 
