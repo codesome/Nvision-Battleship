@@ -255,14 +255,30 @@ io.on('connection', function(socket) {
  */
 function joinWaitingPlayersForSomeone() {
   var players = getClientsInRoom('waiting for someone');
-  var playersWaiting = getClientsInRoom('waiting room');
-  var i=0;
-  while (i<players.length) {
-    var player = players[i];
-    var against = url.parse(player.handshake.headers.referer).pathname.substring(3)
-    if (userArray[against]) {
-      var otherPlayer = io.sockets.connected[userArray[against]]
-      console.log(otherPlayer.rooms)
+  var player = players[players.length-1];
+  var against = url.parse(player.handshake.headers.referer).pathname.substring(3)
+  if (userArray[against]) {
+    var otherPlayer = io.sockets.connected[userArray[against]]
+    if(otherPlayer.rooms.indexOf('waiting room') >= 0) {
+      // 2 player waiting. Create new game!
+      var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
+      // create new room for this game
+      player.leave('waiting for someone');
+      otherPlayer.leave('waiting room');
+      player.join('game' + game.id);
+      otherPlayer.join('game' + game.id);
+
+      users[player.id].player = 0;
+      users[otherPlayer.id].player = 1;
+      users[player.id].inGame = game;
+      users[otherPlayer.id].inGame = game;
+
+      io.to('game' + game.id).emit('join', game.id);
+
+      // send initial ship placements
+      io.to(player.id).emit('update', game.getGameState(0, 0));
+      io.to(otherPlayer.id).emit('update', game.getGameState(1, 1));
+    } else if (otherPlayer.rooms.indexOf('waiting for someone') >= 0 && userArray[url.parse(otherPlayer.handshake.headers.referer).pathname.substring(3)] == player.id) {
       // 2 player waiting. Create new game!
       var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
       // create new room for this game
@@ -281,8 +297,8 @@ function joinWaitingPlayersForSomeone() {
       // send initial ship placements
       io.to(player.id).emit('update', game.getGameState(0, 0));
       io.to(otherPlayer.id).emit('update', game.getGameState(1, 1));
-      players = getClientsInRoom('waiting for someone')
-    } else i++;
+    }
+    players = getClientsInRoom('waiting for someone')
   }
 }
 
