@@ -38,7 +38,6 @@ passport.use(new FacebookStrategy({
   callbackURL: 'http://localhost:8900/auth/facebook/callback',
   profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
-  console.log(profile)
   process.nextTick(function() {
     if (!profile.emails) profile.emails = [{value : profile.id}]
     User.findOne({
@@ -107,11 +106,9 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser(function(user, cb){
-  //console.log('s')
   cb(null, user.id)
 })
 passport.deserializeUser(function(id, cb){
-  //console.log('d')
   User.findOne({id:id},function(err,user){
     if (err) cb(err)
     else cb(null, user);
@@ -171,6 +168,10 @@ io.on('connection', function(socket) {
     email: socket.request.session.passport.user
   };
   userArray[socket.request.session.passport.user] = socket.id;
+  // User.findOne({id:socket.request.session.passport.user}, function(err, user) {
+  //   if (err) console.log(err)
+  //   else userArray[user.username] = socket.id
+  // })
 
   // join waiting room until there are enough players to start a new game
 
@@ -255,10 +256,12 @@ io.on('connection', function(socket) {
  */
 function joinWaitingPlayersForSomeone() {
   var players = getClientsInRoom('waiting for someone');
+  if (players.length == 0) return;
   var player = players[players.length-1];
   var against = url.parse(player.handshake.headers.referer).pathname.substring(3)
   if (userArray[against]) {
     var otherPlayer = io.sockets.connected[userArray[against]]
+    if (!otherPlayer) return;
     if(otherPlayer.rooms.indexOf('waiting room') >= 0) {
       // 2 player waiting. Create new game!
       var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);

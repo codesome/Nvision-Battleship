@@ -1,3 +1,5 @@
+<% if (locals.err) {%><%= err %><% }%>
+<br>
 <form action="/updateUsername" method="post">
   <input type="text" name="username" placeholder="enter username">
   <input type="submit">
