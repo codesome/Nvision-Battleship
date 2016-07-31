@@ -18,6 +18,7 @@ var port = 8900;
 
 users = {};
 userArray = {};
+onlineArray = {};
 var gameIdCounter = 1;
 
 passport = require('passport')
@@ -41,7 +42,7 @@ passport.use(new FacebookStrategy({
   process.nextTick(function() {
     if (!profile.emails) profile.emails = [{value : profile.id}]
     User.findOne({
-      'id': profile.emails[0].value
+      email: profile.emails[0].value
     }, function(err, user) {
       if (err)
         return done(err);
@@ -50,6 +51,7 @@ passport.use(new FacebookStrategy({
       } else {
         var newUser = new User();
         newUser.id = profile.emails[0].value;
+        newUser.email = profile.emails[0].value;
         newUser.facebook.id = profile.id;
         newUser.facebook.token = accessToken;
         newUser.facebook.displayName = profile.displayName;
@@ -77,7 +79,7 @@ passport.use(new GoogleStrategy({
   function(token, refreshToken, profile, done) {
     process.nextTick(function() {
       User.findOne({
-        'id': profile.emails[0].value
+        email: profile.emails[0].value
       }, function(err, user) {
         if (err) {
           return done(err)
@@ -86,6 +88,7 @@ passport.use(new GoogleStrategy({
         } else {
           var newUser = new User();
           newUser.id = profile.emails[0].value;
+          newUser.email = profile.emails[0].value;
           newUser.google.id = profile.id;
           newUser.google.token = token;
           newUser.google.displayName = profile.displayName;
@@ -159,15 +162,21 @@ io.use(function(socket, next) {
 });
 
 io.on('connection', function(socket) {
+  var against = url.parse(socket.handshake.headers.referer).pathname;
   // console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
   // if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
   // create user object for additional data
-  users[socket.id] = {
-    inGame: null,
-    player: null,
-    email: socket.request.session.passport.user
-  };
-  userArray[socket.request.session.passport.user] = socket.id;
+  if (against == '/war!' || against.substring(0, 3) == '/u/') {
+    users[socket.id] = {
+      inGame: null,
+      player: null,
+      email: socket.request.session.passport.user
+    };
+    userArray[socket.request.session.passport.user] = socket.id;
+  }
+  if (onlineArray[socket.request.session.passport.user]) onlineArray[socket.request.session.passport.user].push(socket.id);
+  else onlineArray[socket.request.session.passport.user] = [socket.id];
+  console.log(onlineArray);
   // User.findOne({id:socket.request.session.passport.user}, function(err, user) {
   //   if (err) console.log(err)
   //   else userArray[user.username] = socket.id
@@ -175,10 +184,8 @@ io.on('connection', function(socket) {
 
   // join waiting room until there are enough players to start a new game
 
-  var against = url.parse(socket.handshake.headers.referer).pathname;
   if (against == "/war!") socket.join('waiting room');
-  else socket.join('waiting for someone');
-
+  else if (against.substring(0, 3) == '/u/') socket.join('waiting for someone');
   /**
    * Handle chat messages
    */
@@ -245,6 +252,9 @@ io.on('connection', function(socket) {
     // TODO update database
     delete users[socket.id];
     delete userArray[socket.request.session.passport.user];
+    var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
+    if (ind>=0) onlineArray[socket.request.session.passport.user].splice(ind, 1);
+    console.log(onlineArray);
   });
 
   joinWaitingPlayers();

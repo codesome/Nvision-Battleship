@@ -20,7 +20,7 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
       if(user.username) res.send('already updated with a username');
       else {
         var username = req.body.username;
-        var re = /^[a-z][a-z0-9_.]*$/
+        var re = /^[a-z][a-z0-9_.]*$/;
         if (!re.test(username)) return res.render('username', {err: 'The username can contain only lowercase letters, digits, underscore and periods. It should start with a lowercase letter'})
         User.findOne({username:username},function(err,u){
           if (err) return next(err)

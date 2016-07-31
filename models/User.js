@@ -8,6 +8,8 @@ var userSchema = new Schema({
 
   username: String,
 
+  email: String,
+
   gamesPlayed: Number,
 
   gamesWon: Number,
