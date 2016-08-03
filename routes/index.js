@@ -1,5 +1,6 @@
 var app = require('express').Router();
 var User = require('../models/User.js');
+var games = require('../models/games.js');
 
 app.get('/',require('connect-ensure-login').ensureLoggedIn(),function(req,  res, next){
   User.findOne({id:req.user.id},function(err, user){
@@ -83,8 +84,14 @@ app.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-app.get('/replay',function(req,res){
-  res.render('replay');
+app.get('/replay/:gameid',function(req,res){
+  games.findOne({gameid:req.params.gameid},function(err,game){
+    if(game){
+      res.render('replay',{game:game});
+    } else {
+      res.send('Invalid URL');
+    }
+  });
 });
 
 module.exports = app;

@@ -35,7 +35,7 @@ var config = require('./config.js')
 passport.use(new FacebookStrategy({
   clientID: config.facebook.clientID,
   clientSecret: config.facebook.clientSecret,
-  callbackURL: 'http://localhost:8900/auth/facebook/callback',
+  callbackURL: '/auth/facebook/callback',
   profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
   console.log(profile)
@@ -73,7 +73,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: config.google.clientID,
     clientSecret: config.google.clientSecret,
-    callbackURL: 'http://localhost:8900/auth/google/callback'
+    callbackURL: '/auth/google/callback'
   },
   function(token, refreshToken, profile, done) {
     process.nextTick(function() {
@@ -306,7 +306,7 @@ function joinWaitingPlayers() {
     users[players[0].id].inGame = game;
     users[players[1].id].inGame = game;
 
-    io.to('game' + game.id).emit('join', game.id);
+    io.to('game' + game.id).emit('join', {id:game.id,gameid:game.gameid});
 
     // send initial ship placements
     io.to(players[0].id).emit('update', game.getGameState(0, 0));

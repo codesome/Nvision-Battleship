@@ -24,14 +24,15 @@ $(function() {
   /**
    * User has joined a game
    */
-  socket.on('join', function(gameId) {
+  socket.on('join', function(gameIds) {
     Game.initGame();
     $('#messages').empty();
     $('#disconnected').hide();
     $('#waiting-room').hide();
     $('#game').show();
     $("#chatbox").show();
-    $('#game-number').html(gameId);
+    $('#game-number').html(gameIds.id);
+    console.log(gameIds.gameid);
   })
 
   /**

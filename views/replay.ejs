@@ -12,6 +12,9 @@
     <div class="row vertical-center-row">
 
       <!-- Game -->
+      <button id="previous" style="float:left">Previous</button>
+      <button id="next" style="float:right">Next</button>
+      <p id="commentary" style="text-align:center;font-weight:bold"><%=game.player1.username%> vs <%=game.player2.username%></p>
       <div>
         <div class="row">
           <div class="col-md-12">
@@ -21,11 +24,11 @@
                 <!-- Player grids -->
                 <div class="row">
                   <div class="col-md-6 player-grid text-center">
-                    <h3>You</h3>
+                    <h3><%=game.player1.username%></h3>
                     <canvas id="canvas1" width="361" height="361">Browser does not support canvas.</canvas>
                   </div>
                   <div class="col-md-6 player-grid text-center">
-                    <h3>Opponent</h3>
+                    <h3><%=game.player2.username%></h3>
                     <canvas id="canvas2" width="361" height="361">Browser does not support canvas.</canvas>
                   </div>
                 </div>
@@ -40,16 +43,32 @@
     </div>
   </div>
 
+  <script>
+    var canvas1 = document.getElementById('canvas1');
+    var canvas2 = document.getElementById('canvas2');
+    var context1 = canvas1.getContext('2d');
+    var context2 = canvas2.getContext('2d');
+    var player1 = "<%=game.player1.username%>";
+    var player2 = "<%=game.player2.username%>";
+  </script>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <script>var allShots = [<%for(var i=0;i<game.shots.length;i++){%>{x:<%=game.shots[i].x%>,y:<%=game.shots[i].y%>,player:<%=game.shots[i].player%>,type:'<%=game.shots[i].type%>'},<% } %>];</script>
   <script type="text/javascript" src="/js/replay.js"></script>
 
   <script>
-  $(document).ready(function(){
-    drawSquares(document.getElementById('canvas1').getContext('2d'));
-    drawSquares(document.getElementById('canvas2').getContext('2d'));
-  });
+
+    drawSquares(context1);
+    drawSquares(context2);
+
+    function drawAllShips() {
+      drawShips(context1,[<%for(var i=0;i<game.player1ships.length;i++){%>{x:<%=game.player1ships[i].x%>,y:<%=game.player1ships[i].y%>,size:<%=game.player1ships[i].size%>,horizontal:<%=game.player1ships[i].horizontal%>},<% } %>]); drawShips(context2,[<%for(var i=0;i<game.player2ships.length;i++){%>{x:<%=game.player2ships[i].x%>,y:<%=game.player2ships[i].y%>,size:<%=game.player2ships[i].size%>,horizontal:<%=game.player2ships[i].horizontal%>},<% } %>]);
+    }
+    drawAllShips();
+
+
   </script>
 
 </body>
