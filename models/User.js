@@ -56,7 +56,7 @@ var userSchema = new Schema({
 
 });
 
-userSchema.index({ _id: 1, id: 1, username: 1 }, { unique: true });
+userSchema.index({id: 1, username: 1, email:1 }, { unique: true });
 
 var User = mongoose.model( 'User' , userSchema );
 
