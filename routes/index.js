@@ -21,12 +21,16 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
       if(user.username) res.send('already updated with a username');
       else {
         var username = req.body.username;
+        var re = /^[a-z][a-z0-9_.]*$/;
+        if (!re.test(username)) return res.render('username', {err: 'The username can contain only lowercase letters, digits, underscore and periods. It should start with a lowercase letter'})
         User.findOne({username:username},function(err,u){
           if (err) return next(err)
           else if(u){
-            res.send('exists');
+            res.render('username', {err: 'username is already taken'});
           } else {
             user.username = username;
+            user.id = username;
+            req.session.passport.user = username;
             user.save(function(err){
               if(err) return next(err);
               else res.redirect('/');
@@ -39,8 +43,20 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
 });
 
 app.get('/war!', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
-  if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
-  res.render('game')
+  User.findOne({id:req.user.id},function(err, user){
+    if (err) return next(err)
+    else if(user){
+      if(user.username) {
+        if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
+        res.render('game');
+      }
+      else {
+        res.redirect('/');
+      }
+    }
+  });
+  // if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
+  // res.render('game')
 });
 
 app.get('/u/*', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
@@ -77,6 +93,10 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
   res.redirect('/');
 });
+
+app.get('/user', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
+  res.send(req.user)
+})
 
 // Logout
 app.get('/logout', function(req, res) {
