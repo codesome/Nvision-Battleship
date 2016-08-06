@@ -2,16 +2,31 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>&eta;vision - Battleship</title>
   </head>
   <body>
     <a href="/war!">Play Now!</a><br>
     <a href="/myHistory">History</a><br>
     <a href="/logout">Logout</a><br>
-    <div>
-    </div>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <pre id="online-users">
+    </pre>
+    <pre id="notifications">
+    </pre>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var socket = io();
+      $(function(){
+        socket.on('online-users', function(data){
+          console.log(data)
+          $("#online-users").html(JSON.stringify(data))
+        })
+        socket.on('notification', function(data){
+          console.log(data)
+          $("#notifications").html(JSON.stringify(data))
+        })
+      });
+    </script>
   </body>
 </html>

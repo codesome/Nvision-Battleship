@@ -3,7 +3,7 @@
 <head>
   <title>NodeBattleship</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/site.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -52,8 +52,8 @@
     var player2 = "<%=game.player2.username%>";
   </script>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
   <script>var allShots = [<%for(var i=0;i<game.shots.length;i++){%>{x:<%=game.shots[i].x%>,y:<%=game.shots[i].y%>,player:<%=game.shots[i].player%>,type:'<%=game.shots[i].type%>'},<% } %>];</script>
   <script type="text/javascript" src="/js/replay.js"></script>
