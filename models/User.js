@@ -16,13 +16,13 @@ var userSchema = new Schema({
 
   logs: [{
 
-    playedWith: String, // id
+    playedWith: String,
 
     startTime: Date,
 
     endTime: Date,
 
-    result: Boolean // 'W'==won 'L'==lost 'N'==no_result
+    result: Boolean 
 
   }],
 

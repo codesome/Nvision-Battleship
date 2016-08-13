@@ -1,0 +1,14 @@
+#gamebody {
+	background: url(/img/game_bg.jpg);
+	background-size: cover;
+}
+
+.panel,.panel-primary,.panel-body {
+	background-color: transparent;
+	border: 0;
+}
+
+.woodtext {
+	color: #dec5a0;
+	font-weight: bold;
+}
