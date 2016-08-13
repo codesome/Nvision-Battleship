@@ -166,6 +166,12 @@ io.on('connection', function(socket) {
   // console.log((new Date().toISOString()) + ' ID ' + socket.id + ' connected.');
   // if (!socket.request.session.passport || userArray[socket.request.session.passport.user]) return;
   // create user object for additional data
+  if (onlineArray[socket.request.session.passport.user]) onlineArray[socket.request.session.passport.user].push(socket.id);
+  else onlineArray[socket.request.session.passport.user] = [socket.id];
+  console.log(onlineArray);
+  io.emit("online-users", onlineArray);
+
+
   if (against == '/war!' || against.substring(0, 3) == '/u/') {
     users[socket.id] = {
       inGame: null,
@@ -173,92 +179,106 @@ io.on('connection', function(socket) {
       email: socket.request.session.passport.user
     };
     userArray[socket.request.session.passport.user] = socket.id;
-  }
-  if (onlineArray[socket.request.session.passport.user]) onlineArray[socket.request.session.passport.user].push(socket.id);
-  else onlineArray[socket.request.session.passport.user] = [socket.id];
-  console.log(onlineArray);
-  // User.findOne({id:socket.request.session.passport.user}, function(err, user) {
-  //   if (err) console.log(err)
-  //   else userArray[user.username] = socket.id
-  // })
+    // join waiting room until there are enough players to start a new game
+    if (against == "/war!") socket.join('waiting room');
+    else if (against.substring(0, 3) == '/u/') {
+      socket.join('waiting for someone');
+      console.log(onlineArray[against.substring(3)])
+      for (i in onlineArray[against.substring(3)]) {
+        console.log(i, onlineArray[against.substring(3)][i])
+        io.to(onlineArray[against.substring(3)][i]).emit('notification', {
+          username : socket.request.session.passport.user
+        })
+      }
 
-  // join waiting room until there are enough players to start a new game
-
-  if (against == "/war!") socket.join('waiting room');
-  else if (against.substring(0, 3) == '/u/') socket.join('waiting for someone');
-  /**
-   * Handle chat messages
-   */
-  socket.on('chat', function(msg) {
-    if(users[socket.id].inGame !== null && msg) {
-      //console.log((new Date().toISOString()) + ' Chat message from ' + socket.id + ': ' + msg);
-
-      // Send message to opponent
-      socket.broadcast.to('game' + users[socket.id].inGame.id).emit('chat', {
-        name: 'Opponent',
-        message: entities.encode(msg),
-      });
-
-      // Send message to self
-      io.to(socket.id).emit('chat', {
-        name: 'Me',
-        message: entities.encode(msg),
-      });
     }
-  });
 
-  /**
-   * Handle shot from client
-   */
-  socket.on('shot', function(position) {
-    var game = users[socket.id].inGame, opponent;
+    /**
+     * Handle chat messages
+     */
+    socket.on('chat', function(msg) {
+      if(users[socket.id].inGame !== null && msg) {
+        //console.log((new Date().toISOString()) + ' Chat message from ' + socket.id + ': ' + msg);
 
-    if(game !== null) {
-      // Is it this users turn?
-      if(game.currentPlayer === users[socket.id].player) {
-        opponent = game.currentPlayer === 0 ? 1 : 0;
+        // Send message to opponent
+        socket.broadcast.to('game' + users[socket.id].inGame.id).emit('chat', {
+          name: 'Opponent',
+          message: entities.encode(msg),
+        });
 
-        if(game.shoot(position)) {
-          // Valid shot
-          checkGameOver(game);
+        // Send message to self
+        io.to(socket.id).emit('chat', {
+          name: 'Me',
+          message: entities.encode(msg),
+        });
+      }
+    });
 
-          // Update game state on both clients.
-          io.to(socket.id).emit('update', game.getGameState(users[socket.id].player, opponent));
-          io.to(game.getPlayerId(opponent)).emit('update', game.getGameState(opponent, opponent));
+    /**
+     * Handle shot from client
+     */
+    socket.on('shot', function(position) {
+      var game = users[socket.id].inGame, opponent;
+
+      if(game !== null) {
+        // Is it this users turn?
+        if(game.currentPlayer === users[socket.id].player) {
+          opponent = game.currentPlayer === 0 ? 1 : 0;
+
+          if(game.shoot(position)) {
+            // Valid shot
+            checkGameOver(game);
+
+            // Update game state on both clients.
+            io.to(socket.id).emit('update', game.getGameState(users[socket.id].player, opponent));
+            io.to(game.getPlayerId(opponent)).emit('update', game.getGameState(opponent, opponent));
+          }
         }
       }
-    }
-  });
+    });
 
-  /**
-   * Handle leave game request
-   */
-  socket.on('leave', function() {
-    if(users[socket.id].inGame !== null) {
-      leaveGame(socket,false);
+    /**
+     * Handle leave game request
+     */
+    socket.on('leave', function() {
+      if(users[socket.id].inGame !== null) {
+        leaveGame(socket,false);
+        // TODO update database
+        socket.join('waiting room');
+        joinWaitingPlayers();
+      }
+    });
+
+    /**
+     * Handle client disconnect
+     */
+    socket.on('disconnect', function() {
+      //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
+      // console.log(socket.request.session.passport.user)
+      leaveGame(socket,true);
       // TODO update database
-      socket.join('waiting room');
-      joinWaitingPlayers();
-    }
-  });
+      delete users[socket.id];
+      delete userArray[socket.request.session.passport.user];
+      var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
+      if (ind>=0) onlineArray[socket.request.session.passport.user].splice(ind, 1);
+      console.log(onlineArray);
+      io.emit("online-users", onlineArray)
+    });
+    joinWaitingPlayers();
+    joinWaitingPlayersForSomeone();
+  } else {
 
-  /**
-   * Handle client disconnect
-   */
-  socket.on('disconnect', function() {
-    //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
-    // console.log(socket.request.session.passport.user)
-    leaveGame(socket,true);
-    // TODO update database
-    delete users[socket.id];
-    delete userArray[socket.request.session.passport.user];
-    var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
-    if (ind>=0) onlineArray[socket.request.session.passport.user].splice(ind, 1);
-    console.log(onlineArray);
-  });
+    /**
+     * Handle client disconnect
+     */
+    socket.on('disconnect', function() {
+      var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
+      if (ind>=0) onlineArray[socket.request.session.passport.user].splice(ind, 1);
+      console.log(onlineArray);
+      io.emit("online-users", onlineArray)
+    });
+  }
 
-  joinWaitingPlayers();
-  joinWaitingPlayersForSomeone();
 });
 
 /**
