@@ -33,7 +33,7 @@ $(function() {
     $("#chatbox").show();
     $('#game-number').html(gameIds.id);
     console.log(gameIds.gameid);
-  })
+  });
 
   /**
    * Update player's game state

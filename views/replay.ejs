@@ -52,7 +52,7 @@
     var player2 = "<%=game.player2.username%>";
   </script>
 
-  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
   <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
   <script>var allShots = [<%for(var i=0;i<game.shots.length;i++){%>{x:<%=game.shots[i].x%>,y:<%=game.shots[i].y%>,player:<%=game.shots[i].player%>,type:'<%=game.shots[i].type%>'},<% } %>];</script>

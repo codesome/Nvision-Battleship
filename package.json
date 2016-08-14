@@ -1,7 +1,7 @@
 {
   "name": "NodeBattleship",
   "version": "0.0.1",
-  "private": "true",
+  "private": true,
   "description": "Multiplayer Battleship with NodeJS and Socket.io",
   "author": {
     "name": "Nvision, IIT Hyderabad"
