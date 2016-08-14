@@ -5,16 +5,53 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/site.css">
+  <link rel="stylesheet" href="/css/game.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-  <div class="container">
-    <div class="row vertical-center-row">
+<body id="gamebody">
 
+<style type="text/css">
+  #previous , #next{
+    width: 5em;
+    height: 4em;
+  }
+  .ctrl-btn {
+    cursor: pointer;
+    width: 10em;
+    height: 4em;
+    margin-top: -5px;
+    -webkit-filter: drop-shadow(0 0 1px #c49754);
+    filter: drop-shadow(0 0 1px #c49754);
+  }
+  .ctrl-btn:hover {
+    -webkit-filter: drop-shadow(0 0 10px #000);
+    filter: drop-shadow(0 0 10px #000); 
+  }
+  #commentary {
+    text-align:center;
+    font-weight:bold;
+    background: url(/img/commentary.jpg) no-repeat;
+    background-size: cover;
+    padding: 3px;
+  }
+  #commentary:hover {
+    padding: 4px;
+    box-shadow: 0 0 10px #000 , 0 0 10px #000;
+  }
+</style>
+
+  <div class="container" style="background-color: transparent !important;">
+    <div class="row"><br>
+    <legend class="woodtext" style="text-align:center;font-size:40px">REPLAY
+    </legend><br>
       <!-- Game -->
-      <button id="previous" style="float:left">Previous</button>
-      <button id="next" style="float:right">Next</button>
-      <p id="commentary" style="text-align:center;font-weight:bold"><%=game.player1.username%> vs <%=game.player2.username%></p>
+      <img id="stop" class="ctrl-btn" src="/img/stop.png" style="height:50px;width:50px;float:right">
+      <img id="play" class="ctrl-btn" src="/img/play.png" style="height:50px;width:100px;float:right">
+      <img id="pause" class="ctrl-btn" src="/img/pause.png" style="height:45px;width:100px;float:right;display:none">
+      <img id="previous" class="ctrl-btn" style="float:left" src="/img/left_wood.png">
+      <img id="next" class="ctrl-btn" style="float:left" src="/img/right_wood.png">
+      <p class="woodtext col-lg-offset-1 col-lg-6" id="commentary" ><%=game.player1.username%> vs <%=game.player2.username%>
+      </p>
       <div>
         <div class="row">
           <div class="col-md-12">
@@ -24,11 +61,11 @@
                 <!-- Player grids -->
                 <div class="row">
                   <div class="col-md-6 player-grid text-center">
-                    <h3><%=game.player1.username%></h3>
+                    <h3 class="woodtext"><%=game.player1.username%></h3>
                     <canvas id="canvas1" width="361" height="361">Browser does not support canvas.</canvas>
                   </div>
                   <div class="col-md-6 player-grid text-center">
-                    <h3><%=game.player2.username%></h3>
+                    <h3 class="woodtext"><%=game.player2.username%></h3>
                     <canvas id="canvas2" width="361" height="361">Browser does not support canvas.</canvas>
                   </div>
                 </div>

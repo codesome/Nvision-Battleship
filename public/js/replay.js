@@ -6,7 +6,6 @@ var grid = [],
     turn = false, gameStatus, squareHover = { x: -1, y: -1 };
 
 function drawSquares(context) {
-  console.log('came');
   var i, j, squareX, squareY;
 
   context.fillStyle = '#222222'
@@ -17,7 +16,7 @@ function drawSquares(context) {
       squareX = j * (squareWidth + gridBorder) + gridBorder;
       squareY = i * (squareHeight + gridBorder) + gridBorder;
 
-      context.fillStyle = '#7799FF';
+      context.fillStyle = '#c49754';
 
       context.fillRect(squareX, squareY, squareWidth, squareHeight);
     }
@@ -78,6 +77,7 @@ function drawMarks(box) {
 };
 
 var currentShot = -1;
+var playInProgress = false;
 $(document).ready(function(){
 
   $("#next").click(function(){
@@ -90,11 +90,15 @@ $(document).ready(function(){
       }
     } else {
       $("#commentary").html("End");
+      $("#pause").click();
     }
 
   });
 
   $("#previous").click(function(){
+    if(playInProgress){
+      $("#pause").click();
+    }
     if(currentShot>=0){
       context1.clearRect(0,0,canvas1.width,canvas1.height);
       context2.clearRect(0,0,canvas2.width,canvas2.height);
@@ -107,6 +111,40 @@ $(document).ready(function(){
       }
       $("#commentary").html(player1 + " vs " + player2);
     }
+  });
+
+  $("#play").click(function(){
+    playInProgress = true;
+    $(this).hide();
+    $("#pause").show();
+    function nextTurn() {
+      $("#next").click();
+      setTimeout(function(){
+        if(playInProgress) {
+          nextTurn();
+        }
+      },1000);
+    }
+    nextTurn();
+  });
+
+  $("#pause").click(function(){
+    playInProgress = false;
+    $(this).hide();
+    $("#play").show();
+  });
+
+  $("#stop").click(function(){
+    playInProgress = false;
+    $("#pause").hide();
+    $("#play").show();
+    context1.clearRect(0,0,canvas1.width,canvas1.height);
+    context2.clearRect(0,0,canvas2.width,canvas2.height);
+    drawSquares(context1);
+    drawSquares(context2);
+    drawAllShips();
+    currentShot = -1;
+    $("#commentary").html(player1 + " vs " + player2);
   });
 
 });
