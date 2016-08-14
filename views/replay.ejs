@@ -19,12 +19,24 @@
     cursor: pointer;
     width: 10em;
     height: 4em;
+    margin-top: -5px;
     -webkit-filter: drop-shadow(0 0 1px #c49754);
     filter: drop-shadow(0 0 1px #c49754);
   }
   .ctrl-btn:hover {
     -webkit-filter: drop-shadow(0 0 10px #000);
     filter: drop-shadow(0 0 10px #000); 
+  }
+  #commentary {
+    text-align:center;
+    font-weight:bold;
+    background: url(/img/commentary.jpg) no-repeat;
+    background-size: cover;
+    padding: 3px;
+  }
+  #commentary:hover {
+    padding: 4px;
+    box-shadow: 0 0 10px #000 , 0 0 10px #000;
   }
 </style>
 
@@ -38,7 +50,7 @@
       <img id="pause" class="ctrl-btn" src="/img/pause.png" style="height:45px;width:100px;float:right;display:none">
       <img id="previous" class="ctrl-btn" style="float:left" src="/img/left_wood.png">
       <img id="next" class="ctrl-btn" style="float:left" src="/img/right_wood.png">
-      <p class="woodtext" id="commentary" style="text-align:center;font-weight:bold"><%=game.player1.username%> vs <%=game.player2.username%>
+      <p class="woodtext col-lg-offset-1 col-lg-6" id="commentary" ><%=game.player1.username%> vs <%=game.player2.username%>
       </p>
       <div>
         <div class="row">

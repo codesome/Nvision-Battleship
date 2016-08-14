@@ -90,7 +90,7 @@ $(document).ready(function(){
       }
     } else {
       $("#commentary").html("End");
-      playInProgress = false;
+      $("#pause").click();
     }
 
   });
