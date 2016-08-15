@@ -7,7 +7,7 @@ app.get('/',require('connect-ensure-login').ensureLoggedIn(),function(req,  res,
     if (err) return next(err);
     else if(user){
       if(user.username)
-        res.render('index');
+        res.render('index', {username: user.username});
       else
         res.render('username');
     }
