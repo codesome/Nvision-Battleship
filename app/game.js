@@ -11,6 +11,10 @@ var games = require('../models/games.js');
  * @param {type} idPlayer2 Socket ID of player 2
  */
 function BattleshipGame(id, idPlayer1, idPlayer2) {
+  console.log('came');
+  console.log(id);
+  console.log(idPlayer1);
+  console.log(idPlayer2);
   this.id = id;
   this.gameid = ''+idPlayer1+idPlayer2;
   this.currentPlayer = Math.floor(Math.random() * 2);
@@ -44,6 +48,7 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
       if(user1 && user2){
         games({
           gameid: ''+idPlayer1+idPlayer2,
+          inProgress: true,
           player1: {
             id: user1.id,
             username: user1.username
@@ -229,6 +234,15 @@ BattleshipGame.prototype.endGame = function(params) {
           if(err) console.log(err); // TODO Handle error
           loser.save(function(err){
             if(err) console.log(err); // TODO Handle error
+            games.findOne({gameid:This.gameid},function(err,game){
+              if(err) console.log(err); // TODO Handle error
+              if(game) {
+                game.inProgress = false;
+                game.save(function(err){
+                  if(err) console.log(err); // TODO Handle error
+                });
+              }
+            });
           });
         });
       }

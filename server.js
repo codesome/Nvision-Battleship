@@ -306,7 +306,7 @@ function joinWaitingPlayersForSomeone() {
       users[player.id].inGame = game;
       users[otherPlayer.id].inGame = game;
 
-      io.to('game' + game.id).emit('join', game.id);
+      io.to('game' + game.id).emit('join', {id:game.id,gameid:game.gameid});
 
       // send initial ship placements
       io.to(player.id).emit('update', game.getGameState(0, 0));
@@ -325,7 +325,7 @@ function joinWaitingPlayersForSomeone() {
       users[player.id].inGame = game;
       users[otherPlayer.id].inGame = game;
 
-      io.to('game' + game.id).emit('join', game.id);
+      io.to('game' + game.id).emit('join', {id:game.id,gameid:game.gameid});
 
       // send initial ship placements
       io.to(player.id).emit('update', game.getGameState(0, 0));
