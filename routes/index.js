@@ -4,17 +4,17 @@ var games = require('../models/games.js');
 
 app.get('/',require('connect-ensure-login').ensureLoggedIn(),function(req,  res, next){
   User.findOne({id:req.user.id},function(err, user){
-    if (err) return next(err)
+    if (err) return next(err);
     else if(user){
       if(user.username)
-        res.render('index');
+        res.render('index', {username: user.username});
       else
         res.render('username');
     }
   });
 });
 
-app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),function(req, res, err){
+app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),function(req, res){
   User.findOne({id:req.user.id},function(err, user){
     if (err) return next(err);
     else if(user){
@@ -22,9 +22,9 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
       else {
         var username = req.body.username;
         var re = /^[a-z][a-z0-9_.]*$/;
-        if (!re.test(username)) return res.render('username', {err: 'The username can contain only lowercase letters, digits, underscore and periods. It should start with a lowercase letter'})
+        if (!re.test(username)) return res.render('username', {err: 'The username can contain only lowercase letters, digits, underscore and periods. It should start with a lowercase letter'});
         User.findOne({username:username},function(err,u){
-          if (err) return next(err)
+          if (err) return next(err);
           else if(u){
             res.render('username', {err: 'username is already taken'});
           } else {
@@ -44,10 +44,10 @@ app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),func
 
 app.get('/war!', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
   User.findOne({id:req.user.id},function(err, user){
-    if (err) return next(err)
+    if (err) return next(err);
     else if(user){
       if(user.username) {
-        if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
+        if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.');
         res.render('game');
       }
       else {
@@ -60,7 +60,7 @@ app.get('/war!', require('connect-ensure-login').ensureLoggedIn(), function(req,
 });
 
 app.get('/u/*', require('connect-ensure-login').ensureLoggedIn(), function(req, res) {
-  if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.')
+  if (userArray[req.user.id]) return res.send('Mutiple connections are not allowed.');
   res.render('game')
 });
 
@@ -96,7 +96,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 
 app.get('/user', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
   res.send(req.user)
-})
+});
 
 // Logout
 app.get('/logout', function(req, res) {

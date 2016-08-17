@@ -1,37 +1,38 @@
-const path = require('path')
-const url = require('url')
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var Entities = require('html-entities').AllHtmlEntities;
-var entities = new Entities();
+const path = require('path');
+const url = require('url');
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
 
-var BattleshipGame = require('./app/game.js');
-var GameStatus = require('./app/gameStatus.js');
+const BattleshipGame = require('./app/game.js');
+const GameStatus = require('./app/gameStatus.js');
 
 //db
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/nvisionBattleship');
 
-var port = 8900;
+const port = 8900;
 
-users = {};
-userArray = {};
-onlineArray = {};
+global.users = {};
+global.userArray = {};
+global.onlineArray = {};
 var gameIdCounter = 1;
 
-passport = require('passport')
-var FacebookStrategy = require('passport-facebook').Strategy;
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
-const expressSession = require('express-session')
-const MongoStore = require('connect-mongo')(expressSession);
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const expressSession = require('express-session');
+const MStore = require('connect-mongo')(expressSession);
 
-var User = require('./models/User.js');
+const User = require('./models/User.js');
 
-var config = require('./config.js')
+const config = require('./config.js');
 
 passport.use(new FacebookStrategy({
   clientID: config.facebook.clientID,
@@ -40,7 +41,7 @@ passport.use(new FacebookStrategy({
   profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
   process.nextTick(function() {
-    if (!profile.emails) profile.emails = [{value : profile.id}]
+    if (!profile.emails) profile.emails = [{value : profile.id}];
     User.findOne({
       email: profile.emails[0].value
     }, function(err, user) {
@@ -63,7 +64,7 @@ passport.use(new FacebookStrategy({
           if (err) {
             return done(err)
           } else {
-            return done(null, newUser) // user shoud have id field
+            return done(null, newUser);
           }
         })
       }
@@ -100,7 +101,7 @@ passport.use(new GoogleStrategy({
             if (err) {
               return done(err)
             } else {
-              return done(null, newUser) // User should have id filed
+              return done(null, newUser);
             }
           })
         }
@@ -110,24 +111,24 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser(function(user, cb){
   cb(null, user.id)
-})
+});
 passport.deserializeUser(function(id, cb){
   User.findOne({id:id},function(err,user){
-    if (err) cb(err)
+    if (err) cb(err);
     else cb(null, user);
   });
-})
+});
 
 var options = {
   url: 'mongodb://localhost/nvisionBattleshipSession',
   autoRemove: 'native'
-}
-var sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', store: new MongoStore(options), name: 'sessionID', resave: true, saveUninitialized: true})
+};
+const sessionMiddleware = expressSession({secret: '$3cr37 p@$$w0rd', store: new MStore(options), name: 'sessionID', resave: true, saveUninitialized: true})
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(require('morgan')('dev'))
+app.use(require('morgan')('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -140,7 +141,8 @@ app.use('/', function(req, res, next) {
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   next();
 });
-app.use('/', require('./routes/index'))
+global.passport = passport;
+app.use('/', require('./routes/index'));
 
 // 404 Handler
 app.use(function(req, res, next) {
@@ -183,9 +185,9 @@ io.on('connection', function(socket) {
     if (against == "/war!") socket.join('waiting room');
     else if (against.substring(0, 3) == '/u/') {
       socket.join('waiting for someone');
-      console.log(onlineArray[against.substring(3)])
-      for (i in onlineArray[against.substring(3)]) {
-        console.log(i, onlineArray[against.substring(3)][i])
+      console.log(onlineArray[against.substring(3)]);
+      for (var i in onlineArray[against.substring(3)]) {
+        console.log(i, onlineArray[against.substring(3)][i]);
         io.to(onlineArray[against.substring(3)][i]).emit('notification', {
           username : socket.request.session.passport.user
         })
@@ -203,13 +205,13 @@ io.on('connection', function(socket) {
         // Send message to opponent
         socket.broadcast.to('game' + users[socket.id].inGame.id).emit('chat', {
           name: 'Opponent',
-          message: entities.encode(msg),
+          message: entities.encode(msg)
         });
 
         // Send message to self
         io.to(socket.id).emit('chat', {
           name: 'Me',
-          message: entities.encode(msg),
+          message: entities.encode(msg)
         });
       }
     });
@@ -243,7 +245,6 @@ io.on('connection', function(socket) {
     socket.on('leave', function() {
       if(users[socket.id].inGame !== null) {
         leaveGame(socket,false);
-        // TODO update database
         socket.join('waiting room');
         joinWaitingPlayers();
       }
@@ -256,7 +257,6 @@ io.on('connection', function(socket) {
       //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' disconnected.');
       // console.log(socket.request.session.passport.user)
       leaveGame(socket,true);
-      // TODO update database
       delete users[socket.id];
       delete userArray[socket.request.session.passport.user];
       var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
@@ -288,9 +288,9 @@ function joinWaitingPlayersForSomeone() {
   var players = getClientsInRoom('waiting for someone');
   if (players.length == 0) return;
   var player = players[players.length-1];
-  var against = url.parse(player.handshake.headers.referer).pathname.substring(3)
+  var against = url.parse(player.handshake.headers.referer).pathname.substring(3);
   if (userArray[against]) {
-    var otherPlayer = io.sockets.connected[userArray[against]]
+    var otherPlayer = io.sockets.connected[userArray[against]];
     if (!otherPlayer) return;
     if(otherPlayer.rooms.indexOf('waiting room') >= 0) {
       // 2 player waiting. Create new game!
@@ -331,7 +331,7 @@ function joinWaitingPlayersForSomeone() {
       io.to(player.id).emit('update', game.getGameState(0, 0));
       io.to(otherPlayer.id).emit('update', game.getGameState(1, 1));
     }
-    players = getClientsInRoom('waiting for someone')
+    // players = getClientsInRoom('waiting for someone');
   }
 }
 
@@ -369,7 +369,7 @@ function joinWaitingPlayers() {
  * Leave user's game
  * @param {type} socket
  */
-function leaveGame(socket,disconnected) {
+function leaveGame(socket, disconnected) {
   var game = users[socket.id].inGame;
   if(game !== null) {
     //console.log((new Date().toISOString()) + ' ID ' + socket.id + ' left game ID ' + game.id);
@@ -420,7 +420,7 @@ function checkGameOver(game) {
 function getClientsInRoom(room) {
   var clients = [];
   for (var id in io.sockets.adapter.rooms[room]) {
-    clients.push(io.sockets.adapter.nsp.connected[id]);
+    if (io.sockets.adapter.rooms[room].hasOwnProperty(id)) clients.push(io.sockets.adapter.nsp.connected[id]);
   }
   return clients;
 }
