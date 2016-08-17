@@ -89,7 +89,7 @@ $(document).ready(function(){
         $("#commentary").html(player1 + " shot " + player2 + " at (" + (allShots[currentShot].y+1) + "," + (allShots[currentShot].x+1) + ")");
       }
     } else {
-      $("#commentary").html("End");
+      $("#commentary").html(winner + " won!");
       $("#pause").click();
     }
 

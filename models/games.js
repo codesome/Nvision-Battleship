@@ -8,6 +8,8 @@ var gamesSchema = new Schema({
 
   inProgress: Boolean,
 
+  winner: String,
+
   player1: {
 
     id: String,

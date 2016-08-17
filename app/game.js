@@ -49,6 +49,7 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
         games({
           gameid: ''+idPlayer1+idPlayer2,
           inProgress: true,
+          winner: "none",
           player1: {
             id: user1.id,
             username: user1.username
@@ -238,6 +239,7 @@ BattleshipGame.prototype.endGame = function(params) {
               if(err) console.log(err); // TODO Handle error
               if(game) {
                 game.inProgress = false;
+                game.winner = winner.username;
                 game.save(function(err){
                   if(err) console.log(err); // TODO Handle error
                 });

@@ -33,7 +33,6 @@ $(function() {
     $("#chatbox").show();
     $('#game-number').html(gameIds.id);
     console.log(gameIds.gameid);
-    console.log(gameIds);
   });
 
   /**
