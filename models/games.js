@@ -6,6 +6,8 @@ var gamesSchema = new Schema({
 
   gameid: String,
 
+  inProgress: Boolean,
+
   player1: {
 
     id: String,

@@ -107,7 +107,10 @@ app.get('/logout', function(req, res) {
 app.get('/replay/:gameid',function(req,res){
   games.findOne({gameid:req.params.gameid},function(err,game){
     if(game){
-      res.render('replay',{game:game});
+      if(game.inProgress)
+        res.send('Game is in progress!');
+      else
+        res.render('replay',{game:game});
     } else {
       res.send('Invalid URL');
     }
