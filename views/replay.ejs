@@ -7,9 +7,34 @@
   <link rel="stylesheet" href="/css/site.css">
   <link rel="stylesheet" href="/css/game.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="fb:app_id" content="309637142759274" />
+  <!--TODO Complete og meta tags-->
+  <meta property="og:url" content="" />
+  <meta property="og:type" content="game.achievement" />
+  <meta property="og:title" content="" />
+  <meta property="og:description" content="" />
+  <meta property="og:site_name" content="" />
+  <meta property="og:image" content="" />
+  <meta property="game:points" content="1000" />
 </head>
 <body id="gamebody">
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '309637142759274',
+      xfbml      : true,
+      version    : 'v2.7'
+    });
+  };
 
+  (function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
 <style type="text/css">
   #previous , #next{
     width: 5em;
@@ -50,6 +75,7 @@
       <img id="pause" class="ctrl-btn" src="/img/pause.png" style="height:45px;width:100px;float:right;display:none">
       <img id="previous" class="ctrl-btn" style="float:left" src="/img/left_wood.png">
       <img id="next" class="ctrl-btn" style="float:left" src="/img/right_wood.png">
+      <button id="sharebtn" class="ctrl-btn">Share</button>
       <p class="woodtext col-lg-offset-1 col-lg-6" id="commentary" ><%=game.player1.username%> vs <%=game.player2.username%>
       </p>
       <div>
@@ -104,7 +130,17 @@
       drawShips(context1,[<%for(var i=0;i<game.player1ships.length;i++){%>{x:<%=game.player1ships[i].x%>,y:<%=game.player1ships[i].y%>,size:<%=game.player1ships[i].size%>,horizontal:<%=game.player1ships[i].horizontal%>},<% } %>]); drawShips(context2,[<%for(var i=0;i<game.player2ships.length;i++){%>{x:<%=game.player2ships[i].x%>,y:<%=game.player2ships[i].y%>,size:<%=game.player2ships[i].size%>,horizontal:<%=game.player2ships[i].horizontal%>},<% } %>]);
     }
     drawAllShips();
+  
+    $("#sharebtn").click(function () {
+      FB.ui({
+        method: 'share',
+        display: 'popup',
+        href: 'http://www.google.com/', // TODO Replace with the url of this page
+        hashtag: '#nvisionBattleship'
+      }, function(response){
 
+      });
+    });
 
   </script>
 
