@@ -170,7 +170,7 @@ io.on('connection', function(socket) {
   // create user object for additional data
   if (onlineArray[socket.request.session.passport.user]) onlineArray[socket.request.session.passport.user].push(socket.id);
   else onlineArray[socket.request.session.passport.user] = [socket.id];
-  console.log(onlineArray);
+  // console.log(onlineArray);
   io.emit("online-users", onlineArray);
 
 
@@ -185,9 +185,9 @@ io.on('connection', function(socket) {
     if (against == "/war!") socket.join('waiting room');
     else if (against.substring(0, 3) == '/u/') {
       socket.join('waiting for someone');
-      console.log(onlineArray[against.substring(3)]);
+      // console.log(onlineArray[against.substring(3)]);
       for (var i in onlineArray[against.substring(3)]) {
-        console.log(i, onlineArray[against.substring(3)][i]);
+        // console.log(i, onlineArray[against.substring(3)][i]);
         io.to(onlineArray[against.substring(3)][i]).emit('notification', {
           username : socket.request.session.passport.user
         })
@@ -261,7 +261,7 @@ io.on('connection', function(socket) {
       delete userArray[socket.request.session.passport.user];
       var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
       if (ind>=0) onlineArray[socket.request.session.passport.user].splice(ind, 1);
-      console.log(onlineArray);
+      // console.log(onlineArray);
       io.emit("online-users", onlineArray)
     });
     joinWaitingPlayers();
@@ -274,7 +274,7 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
       var ind = onlineArray[socket.request.session.passport.user].indexOf(socket.id);
       if (ind>=0) onlineArray[socket.request.session.passport.user].splice(ind, 1);
-      console.log(onlineArray);
+      // console.log(onlineArray);
       io.emit("online-users", onlineArray)
     });
   }
