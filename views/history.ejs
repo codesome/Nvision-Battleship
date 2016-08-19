@@ -3,6 +3,7 @@
     <th>
       <td>Oponent</td>
       <td>Result</td>
+      <td></td>
     </th>
   </thead>
   <tbody>
@@ -10,6 +11,7 @@
       <tr>
         <td><%= data[i].playedWith %><td>
         <td><%if(data[i].result){%>Won<%}else{%>Lost<%}%><td>
+        <td><a href="/replay/<%= data[i].gameid %>">replay</a><td>
       </tr>
     <% } %>
   </tbody>

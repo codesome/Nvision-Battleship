@@ -16,6 +16,8 @@ var userSchema = new Schema({
 
   logs: [{
 
+    gameid: String,
+
     playedWith: String,
 
     startTime: Date,
