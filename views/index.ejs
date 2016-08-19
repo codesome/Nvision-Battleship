@@ -5,8 +5,29 @@
       <title>&eta;vision - Battleship</title>
       <link rel="stylesheet" href="/css/bootstrap.min.css">
       <link rel="stylesheet" href="/css/indexstyle.css">
+      <link rel="stylesheet" href="/css/fonts.css">
   </head>
   <body>
+  <style type="text/css">
+    #menu-container {
+      text-align: center;
+      width: 50em;
+      height: 50em;
+      padding: 9em;
+      background: url(/img/old_paper_scroll.png) no-repeat;
+      background-size: contain; 
+    }
+    #menu-container a {
+      font-size: 2em;
+      color: brown;
+      font-weight: bold;
+      text-decoration: none;
+      text-shadow: 0 0 1px #dec5a0;
+    }
+    #menu-container a:hover {
+      text-shadow: 0 0 1px #000;
+    }
+  </style>
     <!--<div class="navbar navbar-inverse">-->
         <!--<div class="container-fluid">-->
             <!--<ul class="nav navbar-nav">-->
@@ -22,9 +43,9 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                <ul class="menu">
-                    <li><img src="/img/right_wood.png" style="height: 25px;">Play with random user</li>
-                    <li>History</li>
+                <ul class="menu" id="menu-container">
+                    <li><a href="/war!">PLAY WITH RANDOM USER</a></li><br>
+                    <li><a href="/myHistory">MY HISTORY</a></li>
                 </ul>
             </div>
             <div class="col-md-3">

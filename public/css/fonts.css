@@ -1,0 +1,8 @@
+@font-face {
+    font-family: UglyQua;
+    src: url(/fonts/UglyQua.ttf);
+    font-weight: bold;
+ }
+ * {
+    font-family: UglyQua !important;
+  }
