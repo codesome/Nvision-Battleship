@@ -28,9 +28,10 @@
       text-shadow: 0 0 1px #000;
     }
     #online-users li {
-      background: #dec5a0;
+      background: #f2e8d9;
     }
     #online-users a {
+      color: brown;
       text-decoration: none;
     }
   </style>
@@ -73,7 +74,7 @@
             ou.html("");
             for (var u in data) {
                 if (data.hasOwnProperty(u) && data[u].length != 0 && u!="<%= username%>") ou.append(`<li class="list-group-item">
-                    <a href="/u/${u}" target="_blank"><div><img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" style="height: 50px;"> ${u}</div></a>
+                    <a href="/u/${u}" target="_blank"><div> ${u}</div></a>
                     </li>`);
 //                for (var i=0; i<15; i++) ou.append(`<li class="list-group-item">
 //                    <a href="/u/${u}" target="_blank"><div><img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" style="height: 50px;"> ${u}</div></a>

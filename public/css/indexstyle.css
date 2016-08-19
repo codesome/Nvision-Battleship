@@ -1,5 +1,6 @@
 body {
-    background: url("../img/game_bg.jpg") fixed center;
+    background: url("../img/index_bg.jpg") center no-repeat;
+    background-size: cover;
 }
 body div {
     position: relative;

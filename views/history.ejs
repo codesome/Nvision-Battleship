@@ -1,18 +1,52 @@
-<table>
-  <thead>
-    <th>
-      <td>Oponent</td>
-      <td>Result</td>
-      <td></td>
-    </th>
-  </thead>
-  <tbody>
-    <% for(var i=0 ; i<data.length ; i++) { %>
-      <tr>
-        <td><%= data[i].playedWith %><td>
-        <td><%if(data[i].result){%>Won<%}else{%>Lost<%}%><td>
-        <td><a href="/replay/<%= data[i].gameid %>">replay</a><td>
-      </tr>
-    <% } %>
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>&eta;vision - Battleship</title>
+      <link rel="stylesheet" href="/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/css/fonts.css">
+  </head>
+  <body>
+  <style type="text/css">
+    body {
+      background: url("../img/index_bg.jpg") center no-repeat;
+      background-size: cover;
+      padding: 3em;
+    }
+    table thead th, table tbody tr {
+      color: brown;
+      text-align: center;
+    }
+    table thead th{
+      font-weight: bold;
+    }
+  </style>
+    <div class="container-fluid">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <table class="table table-striped table table-hover">
+            <thead>
+              <th>
+                <td>Opponent</td>
+                <td>Result</td>
+                <td>&nbsp;</td>
+              </th>
+            </thead>
+            <tbody>
+              <% for(var i=0 ; i<data.length ; i++) { %>
+                <tr>
+                  <td><%= data[i].playedWith %><td>
+                  <td><%if(data[i].result){%>Won<%}else{%>Lost<%}%><td>
+                  <td><a href="/replay/<%= data[i].gameid %>" target="_blank">replay</a><td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
