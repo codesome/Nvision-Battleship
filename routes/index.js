@@ -14,6 +14,18 @@ app.get('/',require('connect-ensure-login').ensureLoggedIn(),function(req,  res,
   });
 });
 
+app.get('/online',require('connect-ensure-login').ensureLoggedIn(),function(req,  res, next){
+  User.findOne({id:req.user.id},function(err, user){
+    if (err) return next(err);
+    else if(user){
+      if(user.username)
+        res.render('online', {username: user.username});
+      else
+        res.render('username');
+    }
+  });
+});
+
 app.post('/updateUsername',require('connect-ensure-login').ensureLoggedIn(),function(req, res){
   User.findOne({id:req.user.id},function(err, user){
     if (err) return next(err);

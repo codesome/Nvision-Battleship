@@ -1,15 +1,10 @@
 body {
     background: url("../img/index_bg.jpg") center no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 }
 body div {
     position: relative;
-}
-ul#online-users {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
 }
 
 ul.menu {

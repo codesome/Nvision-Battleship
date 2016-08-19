@@ -6,40 +6,34 @@
       <link rel="stylesheet" href="/css/bootstrap.min.css">
       <link rel="stylesheet" href="/css/indexstyle.css">
       <link rel="stylesheet" href="/css/fonts.css">
+      <link rel="stylesheet" href="/css/game.css">
   </head>
   <body>
   <style type="text/css">
     body {
-      overflow-y: hidden;
+      overflow-y: auto;
       padding: 2em;
+      height: 100vh;
     }
-    #menu-container {
-      text-align: center;
-      width: 100%;
-      padding: 9em;
-      background: url(/img/old_paper_scroll.png) no-repeat;
-      background-size: contain;
+    #online-users li {
+      background: #f2e8d9;
     }
-    #menu-container a {
-      font-size: 2.7em;
-      color: brown;
+    #online-users a {
+      color: #715428;
       font-weight: bold;
       text-decoration: none;
-      text-shadow: 0 0 3px #dec5a0;
     }
-    #menu-container a:hover {
-      text-shadow: 0 0 1px #000;
+    legend {
+      color: #fff !important;
+      text-align: center;
+      background-color: #caa368;
     }
   </style>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-offset-2 col-md-8">
-                <ul class="menu" id="menu-container">
-                    <li><a href="/war!">PLAY WITH RANDOM USER</a></li><br><br>
-                    <li><a href="/online">PLAY WITH A SPECIFIC USER</a></li><br><br>
-                    <li><a href="/myHistory">MY HISTORY</a></li><br><br>
-                    <li><a href="/logout">LOGOUT</a></li>
-                </ul>
+            <div class="col-md-offset-4 col-md-4 col-md-offset-4">
+                <legend class="woodtext">Online Users</legend>
+                <ul id="online-users" class="list-group"></ul>
             </div>
         </div>
     </div>
@@ -52,6 +46,16 @@
     <script type="text/javascript">
       var socket = io();
       $(function(){
+        socket.on('online-users', function(data){
+            var ou = $('#online-users');
+            ou.html("");
+            for (var u in data) {
+                if (data.hasOwnProperty(u) && data[u].length != 0 && u!="<%= username%>") ou.append(`<li class="list-group-item" style="text-align: center;">
+                    <a href="/u/${u}" target="_blank"><div>${u}</div></a>
+                    </li>`);
+            }
+
+        });
         socket.on('notification', function(data){
           console.log(data)
           $("#notifications").html(JSON.stringify(data))
