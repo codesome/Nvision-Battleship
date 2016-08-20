@@ -62,23 +62,30 @@
   }
   #sharebtn {
     float: right;
-    background: url(/img/commentary.jpg) no-repeat;
-    border-radius: 50%;
+    background: transparent;
+    -webkit-filter: drop-shadow(0 0 10px #000);
+    filter: drop-shadow(0 0 10px #000);
     padding: 0;
     margin-right: 1em;
     width: 50px;
     height: 50px;
   }
-  #commentary:hover , #sharebtn:hover {
+  #commentary:hover {
     padding: 4px;
     box-shadow: 0 0 10px #000 , 0 0 10px #000;
+  }
+  #sharebtn:hover {
+    padding: 0.2em;
   }
 </style>
 
   <div class="container" style="background-color: transparent !important;">
     <div class="row"><br>
-    <legend class="woodtext" style="text-align:center;font-size:40px;">REPLAY<button id="sharebtn"class="btn">
-        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iMTAwbW0iIHN0eWxlPSJzaGFwZS1yZW5kZXJpbmc6Z2VvbWV0cmljUHJlY2lzaW9uOyB0ZXh0LXJlbmRlcmluZzpnZW9tZXRyaWNQcmVjaXNpb247IGltYWdlLXJlbmRlcmluZzpvcHRpbWl6ZVF1YWxpdHk7IGZpbGwtcnVsZTpldmVub2RkOyBjbGlwLXJ1bGU6ZXZlbm9kZCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHdpZHRoPSIxMDBtbSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KICAgPCFbQ0RBVEFbCiAgICAuZmlsMCB7ZmlsbDojMDA4REQyfQogICBdXT4KICA8L3N0eWxlPjwvZGVmcz48ZyBpZD0iRWJlbmVfeDAwMjBfMSI+PHBhdGggY2xhc3M9ImZpbDAiIGQ9Ik01My4xMjUgNjguNzQ5OWwtMC4wMDAxIC0xNS42MjUgNS4zMjM4IDAgMC43MTI5IC02LjI1MDEgLTYuMDUxMiAwIDAgLTMuODE3MmMwLC0xLjc2OTMgMC40OTEzLC0yLjk3NSAzLjAyODUsLTIuOTc1bDMuMjM1OSAtMC4wMDE1IDAgLTUuNDY1NGMtMC41NTk5LC0wLjA3NDQgLTIuNDUyNiwtMC4yNDA4IC00LjY4NzMsLTAuMjQwOCAtNC42NjU0LDAgLTcuODEyNiwyLjg0NzggLTcuODEyNiw4LjA3NzZsMCA0LjQyMjQgLTUuNDY4NyAwIDAgNi4yNDk5IDUuNDY4OCAwLjAwMDEgLTAuMDAwMSAxNS42MjUgNi4yNTAxIDB6bS0zNC4wNjA3IDEyLjE4NTljLTE3LjA4NTIsLTE3LjA4NTQgLTE3LjA4NTIsLTQ0Ljc4NiAwLjAwMDEsLTYxLjg3MTUgMTcuMDg1NCwtMTcuMDg1MSA0NC43ODYsLTE3LjA4NTEgNjEuODcxNCwwIDE3LjA4NTIsMTcuMDg1NCAxNy4wODUxLDQ0Ljc4NiAtMC4wMDAxLDYxLjg3MTMgLTE3LjA4NTUsMTcuMDg1MyAtNDQuNzg2LDE3LjA4NTQgLTYxLjg3MTQsMC4wMDAyem0yLjIwOTQgLTIuMjA5N2MtMTUuODY0OSwtMTUuODY0OSAtMTUuODY0OCwtNDEuNTg3MyAwLjAwMDMsLTU3LjQ1MjMgMTUuODY0OCwtMTUuODY1IDQxLjU4NzIsLTE1Ljg2NSA1Ny40NTIsMCAxNS44NjUxLDE1Ljg2NSAxNS44NjUxLDQxLjU4NzMgMC4wMDAxLDU3LjQ1MjIgLTE1Ljg2NDksMTUuODY1IC00MS41ODc0LDE1Ljg2NTIgLTU3LjQ1MjQsMC4wMDAxeiIvPjwvZz48L3N2Zz4=">
+    <legend class="woodtext" style="text-align:center;font-size:40px;">
+    <a href="/" class="woodtext" style="float:left;text-decoration:none">Dockyard</a>
+    REPLAY
+      <button id="sharebtn" class="btn">
+        <img src="/img/fb_vintage.png" title="Share on FB" alt="share">
       </button>
     </legend><br>
       <!-- Game -->

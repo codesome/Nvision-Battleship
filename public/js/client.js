@@ -1,5 +1,5 @@
 var socket = io();
-
+var gameid = "";
 $(function() {
   /**
    * Successfully connected to server event
@@ -32,6 +32,7 @@ $(function() {
     $('#game').show();
     $("#chatbox").show();
     $('#game-number').html(gameIds.id);
+    gameid = gameIds.gameid;
     console.log(gameIds.gameid);
   });
 

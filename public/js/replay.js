@@ -84,9 +84,9 @@ $(document).ready(function(){
     if(currentShot != allShots.length-1){
       drawMarks(allShots[++currentShot]);
       if(allShots[currentShot].player) {
-        $("#commentary").html(player2 + " shot " + player1 + " at (" + (allShots[currentShot].y+1) + "," + (allShots[currentShot].x+1) + ")");
+        $("#commentary").html(player2 + " shot " + player1 + " at ( " + (allShots[currentShot].y+1) + " , " + (allShots[currentShot].x+1) + " )");
       } else {
-        $("#commentary").html(player1 + " shot " + player2 + " at (" + (allShots[currentShot].y+1) + "," + (allShots[currentShot].x+1) + ")");
+        $("#commentary").html(player1 + " shot " + player2 + " at ( " + (allShots[currentShot].y+1) + " , " + (allShots[currentShot].x+1) + " )");
       }
     } else {
       $("#commentary").html(winner + " won!");
