@@ -14,6 +14,8 @@ var userSchema = new Schema({
 
   gamesWon: Number,
 
+  image: String,
+
   logs: [{
 
     gameid: String,

@@ -38,8 +38,9 @@ passport.use(new FacebookStrategy({
   clientID: config.facebook.clientID,
   clientSecret: config.facebook.clientSecret,
   callbackURL: '/auth/facebook/callback',
-  profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
+  profileFields: ['id', 'picture' , 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified']
 }, function(accessToken, refreshToken, profile, done) {
+      console.log(profile);
   process.nextTick(function() {
     if (!profile.emails) profile.emails = [{value : profile.id}];
     User.findOne({
@@ -58,6 +59,7 @@ passport.use(new FacebookStrategy({
         newUser.facebook.displayName = profile.displayName;
         newUser.facebook.profileUrl = profile.profileUrl;
         newUser.facebook.email = profile.emails[0].value;
+        newUser.image = profile.photos[0];
         newUser.gamesPlayed = 0;
         newUser.gamesWon = 0;
         newUser.save(function(err) {
@@ -95,6 +97,7 @@ passport.use(new GoogleStrategy({
           newUser.google.displayName = profile.displayName;
           newUser.google.email = profile.emails[0].value;
           newUser.google.profileUrl = profile._json.url;
+          newUser.image = profile._json.image.url;
           newUser.gamesPlayed = 0;
           newUser.gamesWon = 0;
           newUser.save(function(err) {
@@ -172,6 +175,7 @@ io.on('connection', function(socket) {
   else onlineArray[socket.request.session.passport.user] = [socket.id];
   // console.log(onlineArray);
   io.emit("online-users", onlineArray);
+  //console.log(onlineArray);
 
 
   if (against == '/war!' || against.substring(0, 3) == '/u/') {
@@ -185,6 +189,8 @@ io.on('connection', function(socket) {
     if (against == "/war!") socket.join('waiting room');
     else if (against.substring(0, 3) == '/u/') {
       socket.join('waiting for someone');
+      //console.log(onlineArray);
+      //console.log(against);
       // console.log(onlineArray[against.substring(3)]);
       for (var i in onlineArray[against.substring(3)]) {
         // console.log(i, onlineArray[against.substring(3)][i]);
@@ -311,6 +317,8 @@ function joinWaitingPlayersForSomeone() {
       // send initial ship placements
       io.to(player.id).emit('update', game.getGameState(0, 0));
       io.to(otherPlayer.id).emit('update', game.getGameState(1, 1));
+      io.to(player.id).emit('opponent',users[otherPlayer.id].email);
+      io.to(otherPlayer.id).emit('opponent',users[player.id].email);
     } else if (otherPlayer.rooms.indexOf('waiting for someone') >= 0 && userArray[url.parse(otherPlayer.handshake.headers.referer).pathname.substring(3)] == player.id) {
       // 2 player waiting. Create new game!
       var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
@@ -330,6 +338,8 @@ function joinWaitingPlayersForSomeone() {
       // send initial ship placements
       io.to(player.id).emit('update', game.getGameState(0, 0));
       io.to(otherPlayer.id).emit('update', game.getGameState(1, 1));
+      io.to(player.id).emit('opponent',users[otherPlayer.id].email);
+      io.to(otherPlayer.id).emit('opponent',users[player.id].email);
     }
     // players = getClientsInRoom('waiting for someone');
   }
@@ -355,12 +365,13 @@ function joinWaitingPlayers() {
     users[players[0].id].inGame = game;
     users[players[1].id].inGame = game;
 
-    io.to('game' + game.id).emit('join', {id:game.id,gameid:game.gameid});
+    io.to('game' + game.id).emit('join', {id:game.id,gameid:game.gameid,opponent:users[players[1].id].email});
 
     // send initial ship placements
     io.to(players[0].id).emit('update', game.getGameState(0, 0));
     io.to(players[1].id).emit('update', game.getGameState(1, 1));
-
+    io.to(players[0].id).emit('opponent',users[players[1].id].email);
+    io.to(players[1].id).emit('opponent',users[players[0].id].email);
     //console.log((new Date().toISOString()) + " " + players[0].id + " and " + players[1].id + " have joined game ID " + game.id);
   }
 }

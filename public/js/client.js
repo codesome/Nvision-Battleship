@@ -24,16 +24,23 @@ $(function() {
   /**
    * User has joined a game
    */
-  socket.on('join', function(gameIds) {
+  socket.on('join', function(data) {
     Game.initGame();
     $('#messages').empty();
     $('#disconnected').hide();
     $('#waiting-room').hide();
     $('#game').show();
     $("#chatbox").show();
-    $('#game-number').html(gameIds.id);
-    gameid = gameIds.gameid;
-    console.log(gameIds.gameid);
+    $('#game-number').html(data.id);
+    gameid = data.gameid;
+    console.log(data.gameid);
+  });
+
+  /**
+   * Opponent username
+   */
+  socket.on('opponent', function(username) {
+    $("#opponent_name").html(username);
   });
 
   /**

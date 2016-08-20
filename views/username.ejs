@@ -1,6 +1,64 @@
-<% if (locals.err) {%><%= err %><% }%>
-<br>
-<form action="/updateUsername" method="post">
-  <input type="text" name="username" placeholder="enter username">
-  <input type="submit">
-</form>
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>&eta;vision - Battleship</title>
+      <link rel="stylesheet" href="/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/css/indexstyle.css">
+      <link rel="stylesheet" href="/css/fonts.css">
+  </head>
+  <body>
+  <style type="text/css">
+  	body {
+      overflow-y: hidden;
+      padding: 5em;
+    }
+  	#menu-container {
+      text-align: center;
+      width: 100%;
+      padding: 9em;
+      background: url(/img/old_paper_scroll.png) no-repeat center center;
+      background-size: contain;
+    }
+  </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                <form action="/updateUsername" method="post">
+                  <ul class="menu" id="menu-container">
+                    <li>
+                    	
+				  <input type="text" class="form-control" name="username" placeholder="select a username">
+                    </li><br><br>
+                    <li>
+                    	
+				  	<input value="Next" type="submit" class="btn">
+                    </li><br><br>
+                  </ul>
+				</form>
+            </div>
+        </div>
+    </div>
+
+    <!--<pre id="notifications">-->
+    <!--</pre>-->
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var socket = io();
+      $(function(){
+        socket.on('notification', function(data){
+          console.log(data)
+          $("#notifications").html(JSON.stringify(data))
+        })
+      });
+    </script>
+
+    <% if(err) { %>
+      <script type="text/javascript">
+        alert("<%=err%>");
+      </script>
+    <% } %>
+  </body>
+</html>

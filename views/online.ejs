@@ -47,18 +47,29 @@
       var socket = io();
       $(function(){
         socket.on('online-users', function(data){
-            var ou = $('#online-users');
-            ou.html("");
-            for (var u in data) {
-                if (data.hasOwnProperty(u) && data[u].length != 0 && u!="<%= username%>") ou.append(`<li class="list-group-item" style="text-align: center;">
-                    <a href="/u/${u}" target="_blank"><div>${u}</div></a>
+          var ou = $('#online-users');
+          ou.html("");
+          var count = 0;
+          for (var u in data) {
+              if (data.hasOwnProperty(u) && data[u].length != 0 && u!="<%= username%>"){
+                ou.append(`<li class="list-group-item" style="text-align: center;">
+                    <a href="/u/${u}"><div>${u}</div></a>
                     </li>`);
-            }
+                count++;
+              } 
+          }
+
+          if(!count) {
+            ou.html('<p style="background:#fff;color:#715428;text-align:center">NO USER IS ONLINE. PLEASE COME AGAIN LATER</p>');
+          }
 
         });
         socket.on('notification', function(data){
-          console.log(data)
           $("#notifications").html(JSON.stringify(data))
+          var accepted = confirm(data.username + " challenged you for a battle!");
+          if(accepted) {
+            window.open('/u/'+data.username,'_self');
+          }
         })
       });
     </script>

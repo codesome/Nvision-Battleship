@@ -21,7 +21,7 @@
       background-size: contain;
     }
     #menu-container a {
-      font-size: 2.7em;
+      font-size: 2em;
       color: #662200;
       font-weight: bold;
       text-decoration: none;
@@ -44,8 +44,8 @@
         </div>
     </div>
 
-    <!--<pre id="notifications">-->
-    <!--</pre>-->
+    <!-- <pre id="notifications">
+    </pre> -->
     <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js" charset="utf-8"></script>
@@ -53,8 +53,11 @@
       var socket = io();
       $(function(){
         socket.on('notification', function(data){
-          console.log(data)
           $("#notifications").html(JSON.stringify(data))
+          var accepted = confirm(data.username + " challenged you for a game");
+          if(accepted) {
+            window.open('/u/'+data.username,'_self');
+          }
         })
       });
     </script>
