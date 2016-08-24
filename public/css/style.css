@@ -94,6 +94,7 @@ position:relative;
 overflow:hidden;
 z-index:0;
 background:url('../img/bg-banner.jpg') no-repeat 50%;
+background-attachment: fixed;
 height:auto;
 background-color:#000 !important;
 height:100vh;
