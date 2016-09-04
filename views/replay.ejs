@@ -1,173 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NodeBattleship</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/site.css">
-  <link rel="stylesheet" href="/css/game.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="fb:app_id" content="309637142759274" />
-  <!--TODO Complete og meta tags-->
-  <meta property="og:url" content="" />
-  <meta property="og:type" content="game.achievement" />
-  <meta property="og:title" content="" />
-  <meta property="og:description" content="" />
-  <meta property="og:site_name" content="" />
-  <meta property="og:image" content="" />
-  <meta property="game:points" content="1000" />
-      <link rel="stylesheet" href="/css/fonts.css">
+    <title>NodeBattleship</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/game.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="fb:app_id" content="972072736235417"/>
+    <!--TODO Complete og meta tags-->
+    <meta property="og:url" content=""/>
+    <meta property="og:type" content="game.achievement"/>
+    <meta property="og:title" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:site_name" content=""/>
+    <meta property="og:image" content=""/>
+    <meta property="game:points" content="1000"/>
+    <link rel="stylesheet" href="/css/fonts.css">
 </head>
 <body id="gamebody">
 <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '309637142759274',
-      xfbml      : true,
-      version    : 'v2.7'
-    });
-  };
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '972072736235417',
+            xfbml: true,
+            version: 'v2.7'
+        });
+    };
 
-  (function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 </script>
 <style type="text/css">
-  #previous , #next{
-    width: 5em;
-    height: 4em;
-  }
-  .ctrl-btn {
-    cursor: pointer;
-    width: 10em;
-    height: 4em;
-    margin-top: -5px;
-    -webkit-filter: drop-shadow(0 0 1px #c49754);
-    filter: drop-shadow(0 0 1px #c49754);
-  }
-  .ctrl-btn:hover {
-    -webkit-filter: drop-shadow(0 0 10px #000);
-    filter: drop-shadow(0 0 10px #000); 
-  }
-  #commentary {
-    text-align:center;
-    font-weight:bold;
-    background: url(/img/commentary.jpg) no-repeat;
-    background-size: cover;
-    padding: 3px;
-  }
-  #sharebtn {
-    float: right;
-    background: transparent;
-    -webkit-filter: drop-shadow(0 0 10px #000);
-    filter: drop-shadow(0 0 10px #000);
-    padding: 0;
-    margin-right: 1em;
-    width: 50px;
-    height: 50px;
-    border: 1px solid brown;
-  }
-  #commentary:hover {
-    padding: 4px;
-    box-shadow: 0 0 10px #000 , 0 0 10px #000;
-  }
-  #sharebtn:hover {
-    padding: 0.2em;
-  }
-  a:hover {
-    color: brown;
-  }
+    #previous, #next {
+        width: 5em;
+        height: 4em;
+    }
+
+    .ctrl-btn {
+        cursor: pointer;
+        width: 10em;
+        height: 4em;
+        margin-top: -5px;
+        -webkit-filter: drop-shadow(0 0 1px #c49754);
+        filter: drop-shadow(0 0 1px #c49754);
+    }
+
+    .ctrl-btn:hover {
+        -webkit-filter: drop-shadow(0 0 10px #000);
+        filter: drop-shadow(0 0 10px #000);
+    }
+
+    #commentary {
+        text-align: center;
+        font-weight: bold;
+        background: url(/img/commentary.jpg) no-repeat;
+        background-size: cover;
+        padding: 3px;
+    }
+
+    #sharebtn {
+        float: right;
+        background: transparent;
+        -webkit-filter: drop-shadow(0 0 10px #000);
+        filter: drop-shadow(0 0 10px #000);
+        padding: 0;
+        margin-right: 1em;
+        width: 50px;
+        height: 50px;
+        border: 1px solid brown;
+    }
+
+    #commentary:hover {
+        padding: 4px;
+        box-shadow: 0 0 10px #000, 0 0 10px #000;
+    }
+
+    #sharebtn:hover {
+        padding: 0.2em;
+    }
+
+    a:hover {
+        color: brown;
+    }
 </style>
 
-  <div class="container" style="background-color: transparent !important;">
+<div class="container" style="background-color: transparent !important;">
     <div class="row"><br>
-    <legend class="woodtext" style="text-align:center;font-size:40px;">
-    <a href="/" class="woodtext" style="float:left;text-decoration:none">
-      Dockyard
-    </a>
-    REPLAY
-      <button id="sharebtn">
-        <img src="/img/fb_vintage.png" title="Share on FB" alt="share">
-      </button>
-    </legend><br>
-      <!-- Game -->
-      <img id="stop" class="ctrl-btn" src="/img/stop.png" style="height:50px;width:50px;float:right">
-      <img id="play" class="ctrl-btn" src="/img/play.png" style="height:50px;width:100px;float:right">
-      <img id="pause" class="ctrl-btn" src="/img/pause.png" style="height:45px;width:100px;float:right;display:none">
-      <img id="previous" class="ctrl-btn" style="float:left" src="/img/left_wood.png">
-      <img id="next" class="ctrl-btn" style="float:left" src="/img/right_wood.png">
-      <p class="woodtext col-lg-offset-1 col-lg-6" id="commentary" ><%=game.player1.username%> vs <%=game.player2.username%>
-      </p>
-      <div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="panel panel-primary">
+        <legend class="woodtext" style="text-align:center;font-size:40px;">
+            <a href="/" class="woodtext" style="float:left;text-decoration:none">
+                Dockyard
+            </a>
+            REPLAY
+            <button id="sharebtn">
+                <img src="/img/fb_vintage.png" title="Share on FB" alt="share">
+            </button>
+        </legend>
+        <br>
+        <!-- Game -->
+        <img id="stop" class="ctrl-btn" src="/img/stop.png" style="height:50px;width:50px;float:right">
+        <img id="play" class="ctrl-btn" src="/img/play.png" style="height:50px;width:100px;float:right">
+        <img id="pause" class="ctrl-btn" src="/img/pause.png" style="height:45px;width:100px;float:right;display:none">
+        <img id="previous" class="ctrl-btn" style="float:left" src="/img/left_wood.png">
+        <img id="next" class="ctrl-btn" style="float:left" src="/img/right_wood.png">
+        <p class="woodtext col-lg-offset-1 col-lg-6" id="commentary"><%= game.player1.username %>
+            vs <%= game.player2.username %>
+        </p>
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
 
-              <div class="panel-body">
-                <!-- Player grids -->
-                <div class="row">
-                  <div class="col-md-6 player-grid text-center">
-                    <h3 class="woodtext"><%=game.player1.username%></h3>
-                    <canvas id="canvas1" width="361" height="361">Browser does not support canvas.</canvas>
-                  </div>
-                  <div class="col-md-6 player-grid text-center">
-                    <h3 class="woodtext"><%=game.player2.username%></h3>
-                    <canvas id="canvas2" width="361" height="361">Browser does not support canvas.</canvas>
-                  </div>
+                        <div class="panel-body">
+                            <!-- Player grids -->
+                            <div class="row">
+                                <div class="col-md-6 player-grid text-center">
+                                    <h3 class="woodtext"><%= game.player1.username %></h3>
+                                    <canvas id="canvas1" width="361" height="361">Browser does not support canvas.
+                                    </canvas>
+                                </div>
+                                <div class="col-md-6 player-grid text-center">
+                                    <h3 class="woodtext"><%= game.player2.username %></h3>
+                                    <canvas id="canvas2" width="361" height="361">Browser does not support canvas.
+                                    </canvas>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
-
-              </div>
-
             </div>
-          </div>
         </div>
-      </div>
 
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     var canvas1 = document.getElementById('canvas1');
     var canvas2 = document.getElementById('canvas2');
     var context1 = canvas1.getContext('2d');
     var context2 = canvas2.getContext('2d');
-    var player1 = "<%=game.player1.username%>";
-    var player2 = "<%=game.player2.username%>";
-    var winner = "<%=game.winner%>";
-  </script>
+    var player1 = "<%= game.player1.username %>";
+    var player2 = "<%= game.player2.username %>";
+    var winner = "<%= game.winner %>";
+</script>
 
-  <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
-  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
-  <script>var allShots = [<%for(var i=0;i<game.shots.length;i++){%>{x:<%=game.shots[i].x%>,y:<%=game.shots[i].y%>,player:<%=game.shots[i].player%>,type:'<%=game.shots[i].type%>'},<% } %>];</script>
-  <script type="text/javascript" src="/js/replay.js"></script>
+<script>var allShots = [<% for(var i = 0;i < game.shots.length;i++){ %>{
+        x:<%= game.shots[i].x %>,
+        y:<%= game.shots[i].y %>,
+        player:<%= game.shots[i].player %>,
+        type: '<%= game.shots[i].type %>'
+    },<% } %>];</script>
+<script type="text/javascript" src="/js/replay.js"></script>
 
-  <script>
+<script>
 
     drawSquares(context1);
     drawSquares(context2);
 
     function drawAllShips() {
-      drawShips(context1,[<%for(var i=0;i<game.player1ships.length;i++){%>{x:<%=game.player1ships[i].x%>,y:<%=game.player1ships[i].y%>,size:<%=game.player1ships[i].size%>,horizontal:<%=game.player1ships[i].horizontal%>},<% } %>]); drawShips(context2,[<%for(var i=0;i<game.player2ships.length;i++){%>{x:<%=game.player2ships[i].x%>,y:<%=game.player2ships[i].y%>,size:<%=game.player2ships[i].size%>,horizontal:<%=game.player2ships[i].horizontal%>},<% } %>]);
+        drawShips(context1, [<% for(var i = 0;i < game.player1ships.length;i++){ %>{
+            x:<%= game.player1ships[i].x %>,
+            y:<%= game.player1ships[i].y %>,
+            size:<%= game.player1ships[i].size %>,
+            horizontal:<%= game.player1ships[i].horizontal %>},<% } %>]);
+        drawShips(context2, [<% for(var i = 0;i < game.player2ships.length;i++){ %>{
+            x:<%= game.player2ships[i].x %>,
+            y:<%= game.player2ships[i].y %>,
+            size:<%= game.player2ships[i].size %>,
+            horizontal:<%= game.player2ships[i].horizontal %>},<% } %>]);
     }
     drawAllShips();
-  
-    $("#sharebtn").click(function () {
-      FB.ui({
-        method: 'share',
-        display: 'popup',
-        href: 'http://www.google.com/', // TODO Replace with the url of this page
-        hashtag: '#nvisionBattleship'
-      }, function(response){
 
-      });
+    $("#sharebtn").click(function () {
+        FB.ui({
+            method: 'share',
+            display: 'popup',
+            href: 'http://www.google.com/', // TODO Replace with the url of this page
+            hashtag: '#nvisionBattleship'
+        }, function (response) {
+
+        });
     });
 
-  </script>
+</script>
 
 </body>
 
