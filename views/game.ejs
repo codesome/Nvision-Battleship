@@ -19,6 +19,9 @@
   body {
     overflow: hidden;
   }
+  .top-bar {
+    cursor: pointer;
+  }
 </style>
   <div class="container" style="background-color: transparent !important;">
     <div class="row vertical-center-row">
@@ -95,11 +98,11 @@
           	<div class="panel panel-default" style="pointer-events: auto">
                   <div class="panel-heading top-bar">
                       <div class="col-md-8 col-xs-8">
-                          <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat</h3>
-                      </div>
+                          <h3 class="panel-title"> Chat</h3>
+                      </div><!-- 
                       <div class="col-md-4 col-xs-4" style="text-align: right;">
                           <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
-                      </div>
+                      </div> -->
                   </div>
                   <div class="panel-body msg_container_base" id="messages-list" style="height : 500px;background: #e6e6e6 !important">
                     <div id="messages">
@@ -138,7 +141,7 @@
   <script type="text/javascript" src="/js/client.js"></script>
   <script type="text/javascript" src="/js/game.js"></script>
   <script type="text/javascript">
-$('.panel-heading span.icon_minim').on('click', function (e) {
+/*$('.panel-heading span.icon_minim').on('click', function (e) {
   var $this = $(this);
   if (!$this.hasClass('panel-collapsed')) {
       $this.parents('.panel').find('.panel-body').slideUp();
@@ -149,16 +152,31 @@ $('.panel-heading span.icon_minim').on('click', function (e) {
       $this.removeClass('panel-collapsed');
       $this.removeClass('glyphicon-plus').addClass('glyphicon-minus');
   }
+});*/
+$('.panel-heading.top-bar').on('click', function (e) {
+  var $this = $(this);
+  if (!$this.hasClass('panel-collapsed')) {
+      $this.parents('.panel').find('.panel-body').slideUp();
+      $this.addClass('panel-collapsed');
+  } else {
+      $this.parents('.panel').find('.panel-body').slideDown();
+      $this.removeClass('panel-collapsed');
+  }
 });
 $('.panel-footer input.chat_input').on('focus', function (e) {
   var $this = $(this);
-  if ($('#minim_chat_window').hasClass('panel-collapsed')) {
+  if ($('.panel-heading.top-bar').hasClass('panel-collapsed')) {
       $this.parents('.panel').find('.panel-body').slideDown();
-      $('#minim_chat_window').removeClass('panel-collapsed');
-      $('#minim_chat_window').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+      $('.panel-heading.top-bar').removeClass('panel-collapsed');
   }
 });
 // $('#game < .container').css('margin-bottom', -$('#chatbox').css('margin-bottom'))
+  </script>
+
+  <script type="text/javascript">
+    
+
+
   </script>
 </body>
 </html>

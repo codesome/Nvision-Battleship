@@ -1,5 +1,8 @@
 var socket = io();
 var gameid = "";
+var newMsg = false;
+var title = "NodeBattleship";
+var opponentName;
 $(function() {
   /**
    * Successfully connected to server event
@@ -40,6 +43,7 @@ $(function() {
    * Opponent username
    */
   socket.on('opponent', function(username) {
+    opponentName = username;
     $("#opponent_name").html(username);
   });
 
@@ -56,6 +60,7 @@ $(function() {
    */
   socket.on('chat', function(msg) {
     if (msg.name == "Me") {
+      newMsg = false;
       $('#messages').append(`
         <div class="row msg_container base_sent">
             <div class="col-md-10 col-xs-10">
@@ -69,6 +74,9 @@ $(function() {
         </div>
         `);
     } else {
+      newMsg = true;
+      $("#chatbox .panel-heading").addClass('top-bar-receive');
+      toggleTitle();
       $('#messages').append(`
         <div class="row msg_container base_receive">
             <div class="col-md-2 col-xs-2 avatar">
@@ -119,6 +127,15 @@ $(function() {
     return false;
   });
 
+  $("#chatbox").click(function(){
+    newMsg = false;
+    $("#chatbox .panel-heading").removeClass('top-bar-receive');
+  });
+  $("#message").on('keypress',function(){
+    newMsg = false;
+    $("#chatbox .panel-heading").removeClass('top-bar-receive');
+  });
+
 });
 
 /**
@@ -136,4 +153,16 @@ function sendLeaveRequest(e) {
  */
 function sendShot(square) {
   socket.emit('shot', square);
+}
+
+function toggleTitle() {
+  if(newMsg) {
+    $("title").html(opponentName+' messaged');
+    setTimeout(function(){
+      $("title").html(title);
+      setTimeout(function(){
+        toggleTitle();
+      },1000);
+    },1000);
+  }
 }

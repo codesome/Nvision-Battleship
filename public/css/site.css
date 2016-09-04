@@ -138,6 +138,10 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+.top-bar-receive {
+  background: #009933 !important;
+}
 .msg_receive{
     padding-left:0;
     margin-left:0;
