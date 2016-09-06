@@ -15,7 +15,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/nvisionBattleship');
 
-const port = 8900;
+const port = 8000;
 
 global.users = {};
 global.userArray = {};
