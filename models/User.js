@@ -42,20 +42,6 @@ var userSchema = new Schema({
 
     profileUrl: String
 
-  },
-
-  facebook: {
-
-    id: String,
-
-    token: String,
-
-    displayName: String,
-
-    email: String,
-
-    profileUrl: String
-
   }
 
 });

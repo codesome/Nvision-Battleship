@@ -23,7 +23,7 @@ global.onlineArray = {};
 var gameIdCounter = 1;
 
 const passport = require('passport');
-const FacebookStrategy = require('passport-facebook').Strategy;
+//const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -34,7 +34,7 @@ const User = require('./models/User.js');
 
 const config = require('./config.js');
 
-passport.use(new FacebookStrategy({
+/*passport.use(new FacebookStrategy({
     clientID: config.facebook.clientID,
     clientSecret: config.facebook.clientSecret,
     callbackURL: '/auth/facebook/callback',
@@ -76,7 +76,7 @@ passport.use(new FacebookStrategy({
             }
         })
     });
-}));
+}));*/
 
 passport.use(new GoogleStrategy({
         clientID: config.google.clientID,

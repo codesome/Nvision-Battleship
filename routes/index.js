@@ -96,10 +96,11 @@ app.get('/login', function(req, res) {
 });
 
 // Facebbok
-app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email', 'public_profile']}));
+/*app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email', 'public_profile']}));
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
   res.redirect('/');
-});
+});*/
+
 // Google
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), function(req, res) {
