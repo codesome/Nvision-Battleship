@@ -119,7 +119,7 @@ var Game = (function() {
       if(turn) {
         $('#turn-status').removeClass('alert-opponent-turn').addClass('alert-your-turn').html('It\'s your turn!');
       } else {
-        $('#turn-status').removeClass('alert-your-turn').addClass('alert-opponent-turn').html('Waiting for opponent.');
+        $('#turn-status').removeClass('alert-your-turn').addClass('alert-opponent-turn').html('Waiting for '+(opponentName || "opponent"));
       }
     }
   };

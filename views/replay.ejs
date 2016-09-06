@@ -8,14 +8,20 @@
     <link rel="stylesheet" href="/css/game.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="fb:app_id" content="972072736235417"/>
-    <!--TODO Complete og meta tags-->
-    <meta property="og:url" content=""/>
+
+    <meta name="description" content="Olympic Quiz">
+    <meta name="author" content="Nvision 2016">
+    <meta name="keyword" content="techno-management,technical,IIT Hyderabad,fest,competitions,events,game,battle,ship,battleship,multiplayer">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:url" content="https://battleship.nvision.org.in/"/>
     <meta property="og:type" content="game.achievement"/>
-    <meta property="og:title" content=""/>
-    <meta property="og:description" content=""/>
-    <meta property="og:site_name" content=""/>
-    <meta property="og:image" content=""/>
+    <meta property="og:title" content="BattleShip | &eta;vision 2016"/>
+    <meta property="og:description" content="Realtime multiplayer battleship game by &eta;vision 2016"/>
+    <meta property="og:site_name" content="&eta;vision"/>
+    <meta property="og:image" content="https://battleship.nvision.org.in/img/logo.png"/>
     <meta property="game:points" content="1000"/>
+
     <link rel="stylesheet" href="/css/fonts.css">
 </head>
 <body id="gamebody">
@@ -189,8 +195,9 @@
         FB.ui({
             method: 'share',
             display: 'popup',
-            href: 'http://www.google.com/', // TODO Replace with the url of this page
-            hashtag: '#nvisionBattleship'
+            href: 'https://battleship.nvision.org.in/',
+            hashtag: '#nvisionBattleship',
+            quote: player1+" vs "+player2+". Have you ever seen any epic battle like this?"
         }, function (response) {
 
         });
@@ -198,6 +205,7 @@
 
 </script>
 
+<script type="text/javascript">console.log('{} with '+ String.fromCharCode(9829) + ' by '+String.fromCharCode(951)+'vision');</script>
 </body>
 
 </html>
