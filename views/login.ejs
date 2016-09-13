@@ -10,6 +10,7 @@ Battleship | &eta;vision
 <link href="/css/style.css" rel="stylesheet">
       <link rel="stylesheet" href="/css/fonts.css">
     <script src="https://use.fontawesome.com/548009fd68.js"></script>
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 <!--<link href="/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -49,26 +50,34 @@ Battleship | &eta;vision
 <div class='subhead'>
  <p></p>
  <div class='buttons'><br><br><br><br><br>
-    <form method="GET" action="/auth/google">
-      <button class="form-submit googleplus" type="submit" title="Continue with Google+"></button>
-    </form>
-					<!-- <form method="GET" action="/auth/facebook">
-                        <button class="form-submit facebook" type="submit" title="Continue with Facebook"></button>
+    <form method="GET" action="/auth/google"><button class="form-submit googleplus" type="submit" title="Enter the dockyard!"></button></form>
+</div>
+</div><br><br><br><br>
+<a href="#about" id="scrollDown">
+  <img src="/img/header-downarrow.png">
+</a>
+</div>
 
-                    </form> -->
-</div>
-</div>
-</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#scrollDown").click(function(event){     
+        event.preventDefault();
+        $('html,body').animate({scrollTop:$(this.hash).offset().top}, 1000);
+    });
+  });
+</script>
 
 </header><!-- /HEADER ENDS HERE-->
 <!-- ABOUT US STARTS HERE-->
 <section class='aboutus' id='about'>
 <div class='container'>
 <div class="row">
-                <div class="col-md-12 yomer-text-center">
-                    <h2>About</h2>
+            <div class="col-md-12 yomer-text-center">
                     <p class="bigtext">
-                        TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD
+                        Everyone loves games. So we thought, why not make it fun? And it's even more fun when you play with your friends. <br><br>
+                        &eta;vision, IIT Hyderabad in collaboration with Lambda, IIT Hyderabad are here with a fun multiplayer game.
+                        So put on your thinking caps and get ready for an intense game of battleship. <br><br>
+                        Dive right in and challenge yourself to sink all five ships fastest.
                     </p>
                 </div>
             </div>
@@ -82,7 +91,7 @@ Battleship | &eta;vision
         <div class="container">
             <div class="row">
                 <div class="col-md-12 yomer-text-center">
-                    <h3>TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD </h3>
+                    <h3>WHAT ARE YOU WAITING FOR?<br><br>  <form method="GET" action="/auth/google"><button class="form-submit googleplus" type="submit" title="Enter the dockyard!"></button></form></h3>
 
                 </div>
             </div>
@@ -181,6 +190,6 @@ jQuery(document).ready(function(){
 </script>
 
 
-<script type="text/javascript">console.log('{} with '+ String.fromCharCode(9829) + ' by '+String.fromCharCode(951)+'vision');</script>
+<script type="text/javascript">console.log('</> with '+ String.fromCharCode(9829) + ' by '+String.fromCharCode(951)+'vision');</script>
 </body>
 </html>
