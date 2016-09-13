@@ -117,7 +117,7 @@ var Game = (function() {
       turn = turnState;
 
       if(turn) {
-        $('#turn-status').removeClass('alert-opponent-turn').addClass('alert-your-turn').html('It\'s your turn!');
+        $('#turn-status').removeClass('alert-opponent-turn').addClass('alert-your-turn').html('<span style="color:green">It\'s your turn!<span>');
       } else {
         $('#turn-status').removeClass('alert-your-turn').addClass('alert-opponent-turn').html('Waiting for '+(opponentName || "opponent"));
       }
