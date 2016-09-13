@@ -81,7 +81,7 @@ const config = require('./config.js');
 passport.use(new GoogleStrategy({
         clientID: config.google.clientID,
         clientSecret: config.google.clientSecret,
-        callbackURL: '/auth/google/callback'
+        callbackURL: 'https://battleship.nvision.org.in/auth/google/callback'
     },
     function (token, refreshToken, profile, done) {
         process.nextTick(function () {
