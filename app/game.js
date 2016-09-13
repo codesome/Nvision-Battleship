@@ -150,10 +150,12 @@ BattleshipGame.prototype.shoot = function(position) {
       x: position.x,
       y: position.y
     };
-    this.switchPlayer();
     if(!this.players[opponent].shoot(gridIndex)) {
+      // Miss
+      this.switchPlayer();
       gameshot['type'] = 'miss';
     } else {
+      // Hit
       gameshot['type'] = 'hit';
     }
     games.findOne({gameid:this.gameid},function(err,game){
