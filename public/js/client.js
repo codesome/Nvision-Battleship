@@ -36,7 +36,6 @@ $(function() {
     $("#chatbox").show();
     $('#game-number').html(data.id);
     gameid = data.gameid;
-    console.log(data.gameid);
   });
 
   /**
