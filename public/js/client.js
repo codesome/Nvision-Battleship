@@ -1,7 +1,7 @@
 var socket = io();
 var gameid = "";
 var newMsg = false;
-var title = "NodeBattleship";
+var title = "Battleship - &eta;vision";
 var opponentName;
 $(function() {
   /**
