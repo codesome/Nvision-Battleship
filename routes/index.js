@@ -107,9 +107,9 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
   res.redirect('/');
 });
 
-app.get('/user', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
-  res.send(req.user)
-});
+// app.get('/user', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
+//   res.send(req.user)
+// });
 
 app.get('/rules', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
   res.render('rules');

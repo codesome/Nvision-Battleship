@@ -14,7 +14,7 @@
     <meta name="keyword" content="techno-management,technical,IIT Hyderabad,fest,competitions,events,game,battle,ship,battleship,multiplayer">
     <meta name="robots" content="index, follow">
 
-    <meta property="og:url" content="https://battleship.nvision.org.in/"/>
+    <meta property="og:url" content="https://battleship.nvision.org.in/replay/<%= game.gameid %>"/>
     <meta property="og:type" content="game.achievement"/>
     <meta property="og:title" content="BattleShip | &eta;vision 2016"/>
     <meta property="og:description" content="Realtime multiplayer battleship game by &eta;vision 2016"/>
@@ -103,9 +103,10 @@
     <div class="row"><br>
         <legend class="woodtext" style="text-align:center;font-size:40px;">
             <a href="/" class="woodtext" style="float:left;text-decoration:none">
+                <img src="/img/nvision.png" style="height: 2em; width: auto; display: inline">
                 Dockyard
             </a>
-            REPLAY
+            <span>REPLAY</span>
             <button id="sharebtn">
                 <img src="/img/fb_vintage.png" title="Share on FB" alt="share">
             </button>
@@ -195,7 +196,7 @@
         FB.ui({
             method: 'share',
             display: 'popup',
-            href: 'https://battleship.nvision.org.in/',
+            href: 'https://battleship.nvision.org.in/replay/<%= game.gameid %>',
             hashtag: '#nvisionBattleship',
             quote: player1+" vs "+player2+". Have you ever seen any epic battle like this?"
         }, function (response) {
