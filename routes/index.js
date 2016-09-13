@@ -111,6 +111,10 @@ app.get('/user', require('connect-ensure-login').ensureLoggedIn(), function(req,
   res.send(req.user)
 });
 
+app.get('/rules', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
+  res.render('rules');
+});
+
 // Logout
 app.get('/logout', function(req, res) {
   req.logout();
