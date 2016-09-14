@@ -103,7 +103,25 @@ app.get('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureLo
   if(req.user && req.user._id){
     User.find({},function(err,users){
       if(users){
-        users.sort(function compare(a,b) {
+        var u = [];
+        var gamesWon;
+        var temp;
+        for(var i=0 ; i<users.length ; i++) {
+          gamesWon = 0;
+          temp = {};
+          for(var j=0 ; j<users[i].logs.length ; j++) {
+            if(!temp[users[i].logs[j].playedWith] && users[i].logs[j].result) {
+              temp[users[i].logs[j].playedWith] = true;
+              gamesWon++;
+            }
+          }
+          u.push({
+            gamesWon:gamesWon,
+            lastWinDate: users[i].lastWinDate,
+            username: users[i].username,
+          });
+        }
+        u.sort(function compare(a,b) {
           if (a.gamesWon > b.gamesWon)
             return -1;
           else if (a.gamesWon < b.gamesWon)
@@ -115,7 +133,7 @@ app.get('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureLo
               return 1;
           }
         });
-        res.render('leaderboard',{users:users});
+        res.render('leaderboard',{users:u});
       } else {
         res.redirect('/');
       }
