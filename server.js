@@ -104,6 +104,7 @@ passport.use(new GoogleStrategy({
                     newUser.image = profile._json.image.url;
                     newUser.gamesPlayed = 0;
                     newUser.gamesWon = 0;
+                    newUser.lastWinDate = new Date;
                     newUser.save(function (err) {
                         if (err) {
                             return done(err)
@@ -405,7 +406,8 @@ function leaveGame(socket, disconnected) {
             if (disconnected) {
                 game.endGame({
                     winnerId: users[game.getWinnerId()].email,
-                    loserId: users[game.getLoserId()].email
+                    loserId: users[game.getLoserId()].email,
+                    disconnection: true
                 });
             }
             checkGameOver(game);

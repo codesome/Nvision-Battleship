@@ -14,6 +14,8 @@ var userSchema = new Schema({
 
   gamesWon: Number,
 
+  lastWinDate: Date,
+
   image: String,
 
   logs: [{
@@ -26,7 +28,9 @@ var userSchema = new Schema({
 
     endTime: Date,
 
-    result: Boolean 
+    result: Boolean,
+
+    disconnection: Boolean,
 
   }],
 

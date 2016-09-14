@@ -159,7 +159,7 @@ BattleshipGame.prototype.shoot = function(position) {
       gameshot['type'] = 'hit';
     }
     games.findOne({gameid:this.gameid},function(err,game){
-      if(game){
+      if(game && game.inProgress){
         game.shots.push(gameshot);
         game.save(function(err){
           if(err) console.log(err);
@@ -171,7 +171,9 @@ BattleshipGame.prototype.shoot = function(position) {
     if(this.players[opponent].getShipsLeft() <= 0) {
       this.gameStatus = GameStatus.gameOver;
       this.winningPlayer = opponent === 0 ? 1 : 0;
-      this.endGame();
+      this.endGame({
+        disconnection: false
+      });
     }
 
     return true;
@@ -215,7 +217,7 @@ BattleshipGame.prototype.endGame = function(params) {
   var d = new Date();
   This.gameStatus = GameStatus.gameOver;
   var winnerId,loserId;
-  if(params){
+  if(params.disconnection){
     winnerId = params.winnerId;
     loserId = params.loserId;
   } else {
@@ -226,11 +228,22 @@ BattleshipGame.prototype.endGame = function(params) {
     User.findOne({id:loserId},function(err,loser){
       if(winner && loser) {
         var winnerGamePos = winner.logs.length-1;
+        var loserGamePos = loser.logs.length-1;
+
+        if(winner.logs[winnerGamePos].result || loser.logs[loserGamePos].result) return;
+
         winner.logs[winnerGamePos].result = true;
         winner.logs[winnerGamePos].endTime = d;
-        var loserGamePos = loser.logs.length-1;
         loser.logs[loserGamePos].endTime = d;
-        winner.gamesWon++;
+
+        loser.logs[loserGamePos].disconnection = params.disconnection        
+        winner.logs[winnerGamePos].disconnection = params.disconnection        
+
+        if(!params.disconnection){
+          winner.gamesWon++;
+          winner.lastWinDate = new Date;
+        } 
+        
         winner.save(function(err){
           if(err) console.log(err); // TODO Handle error
           loser.save(function(err){

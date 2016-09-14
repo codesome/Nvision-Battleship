@@ -10,6 +10,8 @@ var gamesSchema = new Schema({
 
   winner: String,
 
+  disconnection: Boolean,
+
   player1: {
 
     id: String,

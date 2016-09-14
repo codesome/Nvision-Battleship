@@ -99,6 +99,32 @@ app.get('/myHistory',ensureNotAMobile,require('connect-ensure-login').ensureLogg
   }
 });
 
+app.get('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureLoggedIn(),function(req,res){
+  if(req.user && req.user._id){
+    User.find({},function(err,users){
+      if(users){
+        users.sort(function compare(a,b) {
+          if (a.gamesWon > b.gamesWon)
+            return -1;
+          else if (a.gamesWon < b.gamesWon)
+            return 1;
+          else {
+            if(Date.parse(a.lastWinDate) < Date.parse(b.lastWinDate))
+              return -1;
+            else
+              return 1;
+          }
+        });
+        res.render('leaderboard',{users:users});
+      } else {
+        res.redirect('/');
+      }
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
 app.get('/login', ensureNotAMobile,function(req, res) {
   if (req.user) res.redirect('/');
   else res.render('login');

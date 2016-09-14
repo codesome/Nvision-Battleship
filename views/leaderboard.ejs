@@ -45,21 +45,33 @@
     <a href="/" class="woodtext" style="float:left;text-decoration:none">
       <img style="height: 2em; width: auto; display: inline" src="/img/nvision.png" class="img-responsive">Dockyard
     </a>
-    <span style="text-shadow:0 0 2px #000 , 0 0 2px #000">RULES</span>
+    <span style="text-shadow:0 0 2px #000 , 0 0 2px #000">LEADERBOARD</span>
     <!-- <a href="/" class="woodtext" style="float:right;text-decoration:none">
         <img src="/img/lambda.png" style="height: 2em; width: auto; display: inline" class="img-responsive">
     </a> -->
     </legend>
     <div class="container-fluid">
       <div class="panel panel-default">
-        <div class="panel-body" style="text-align:center;color:brown;font-size:2em;padding:2em">
-          <ul>
-            <li>Before the game begins five ships are placed at random on the board.</li><br><span style="text-shadow:0 0 2px #000 , 0 0 2px #000">
-</span>            <li>You will win the battle when you have sunk all 5 ships of the opponent (or) the opponent has surrendered.</li><br>
-            <li>Internet diconnection (or) closing the tab/window in between the game will be considered as surrender.</li><br>
-            <li>Points will be awarded ONLY when you destroy all 5 ships</li>
-
-          </ul>
+        <div class="panel-body">
+          <table class="table table-striped table-hover">
+            <thead>
+              <th>
+                <td style="font-size:16px;text-align: center;">Player</td>
+                <td style="font-size:16px;text-align: center;"></td>
+                <td style="font-size:16px;text-align: center;">Battles won</td>
+                <td style="font-size:16px;text-align: center;"></td>
+              </th>
+            </thead>
+            <tbody>
+              <% for(var i=0 ; i<users.length ; i++) { %>
+                <tr>
+                  <td></td>
+                  <td style="text-align: center;"><%= users[i].username %><td>
+                  <td style="text-align: center;"><%= users[i].gamesWon %><td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
