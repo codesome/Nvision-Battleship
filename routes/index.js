@@ -110,7 +110,7 @@ app.get('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureLo
           gamesWon = 0;
           temp = {};
           for(var j=0 ; j<users[i].logs.length ; j++) {
-            if(!temp[users[i].logs[j].playedWith] && users[i].logs[j].result) {
+            if(!temp[users[i].logs[j].playedWith] && users[i].logs[j].result && !users[i].logs[j].disconnection) {
               temp[users[i].logs[j].playedWith] = true;
               gamesWon++;
             }
