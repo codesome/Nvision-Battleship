@@ -18,7 +18,6 @@
 				<td>Player 1</td>
 				<td>Player 2</td>
 				<td>Winner</td>
-				<td>Disconnection</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -29,7 +28,6 @@
 					<td><%=games[i].player1.username%></td>
 					<td><%=games[i].player2.username%></td>
 					<td><%=games[i].winner%></td>
-					<td><%if(games[i].disconnection){%>YES<%}else{%>NO<%}%></td>
 				</tr>
 
 			<% } %>
