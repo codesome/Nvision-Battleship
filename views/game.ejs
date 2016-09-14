@@ -11,7 +11,8 @@
 
     <meta name="description" content="Olympic Quiz">
     <meta name="author" content="Nvision 2016">
-    <meta name="keyword" content="techno-management,technical,IIT Hyderabad,fest,competitions,events,game,battle,ship,battleship,multiplayer">
+    <meta name="keywords" content="techno-management, technical, IIT Hyderabad, fest, competitions, events, game, battle,
+    ship, battleship, multiplayer">
     <meta name="robots" content="index, follow">
 
     <meta property="og:url" content="https://battleship.nvision.org.in/"/>
@@ -38,11 +39,23 @@
   }
 </style>
   <div class="container" style="background-color: transparent !important;">
+
     <div class="row vertical-center-row">
 
 
       <!-- Disconnected from server -->
       <div id="disconnected">
+        <div class="row" style="position: fixed; left: 0; right: 0; top: 0">
+          <div class="col-md-3" style="text-align: left; margin-bottom: 1em">
+            <img src="/img/nvision.png" style="height: 5em; width: auto;">
+          </div>
+          <div class="col-md-6" style="text-align: center; margin-bottom: 1em">
+            <span style="font-size: 5em; color: silver">Battleship</span>
+          </div>
+          <div class="col-md-3" style="text-align: right; right: -5%; margin-bottom: 1em">
+            <img src="/img/lambda.png" style="height: 5em; width: auto;">
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4 text-center">
             <div class="alert alert-danger">
@@ -54,6 +67,17 @@
 
       <!-- Waiting room -->
       <div id="waiting-room" style="display:none;">
+        <div class="row" style="position: fixed; left: 0; right: 0; top: 0">
+          <div class="col-md-3" style="text-align: left; margin-bottom: 1em">
+            <img src="/img/nvision.png" style="height: 7em; width: auto;">
+          </div>
+          <div class="col-md-6" style="text-align: center; margin-bottom: 1em">
+            <span style="font-size: 5em; color: silver">Battleship</span>
+          </div>
+          <div class="col-md-3" style="text-align: right; right: -5%; margin-bottom: 1em">
+            <img src="/img/lambda.png" style="height: 7em; width: auto;">
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4 text-center">
             <div class="panel panel-primary">
@@ -71,6 +95,9 @@
                   Dockyard
               </a>
               <span>BATTLE!</span>
+              <a href="/" class="woodtext" style="float:right;text-decoration:none">
+                  <img src="/img/lambda.png" style="height: 2em; width: auto; display: inline">
+              </a>
           </legend>
         <div class="row">
           <div class="col-md-12">
@@ -122,7 +149,7 @@
                   <div class="panel-heading top-bar">
                       <div class="col-md-8 col-xs-8">
                           <h3 class="panel-title"> Chat</h3>
-                      </div><!-- 
+                      </div><!--
                       <div class="col-md-4 col-xs-4" style="text-align: right;">
                           <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
                       </div> -->
@@ -197,7 +224,7 @@ $('.panel-footer input.chat_input').on('focus', function (e) {
   </script>
 
   <script type="text/javascript">
-    
+
 
 
   </script>

@@ -108,7 +108,7 @@ top:100px;
 text-align: center;
 z-index: 1;
 }
-.logo
+.logo, .logo1
 {
 position:absolute;
 top:10px;
@@ -122,6 +122,13 @@ z-index:3;
 opacity:1;
 background:url('../img/nvision.png') no-repeat;
 background-size: contain;
+}
+.logo1 {
+	right: 5%;
+	left: auto;
+	background:url('../img/lambda.png') no-repeat;
+	background-position: center;
+	background-size: contain;
 }
 .titles
 {
