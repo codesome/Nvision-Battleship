@@ -69,7 +69,7 @@
                 <tr>
                 <td></td>
                   <td style="text-align: center;"><%= data[i].playedWith %><td>
-                  <td style="text-align: center;"><%if(data[i].result){%>Won<%}else{%>Lost<%}%><td>
+                  <td style="text-align: center;"><%if(data[i].disconnection){%>Disconnection<%} else if(data[i].result){%>Won<%}else{%>Lost<%}%><td>
                   <td><a href="/replay/<%= data[i].gameid %>" target="_blank">replay</a><td>
                 </tr>
               <% } %>
