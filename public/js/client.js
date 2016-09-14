@@ -58,6 +58,7 @@ $(function() {
    * Game chat message
    */
   socket.on('chat', function(msg) {
+    //if(!msg || !msg.message) return;
     if (msg.name == "Me") {
       newMsg = false;
       $('#messages').append(`
@@ -106,6 +107,10 @@ $(function() {
    */
   socket.on('gameover', function(isWinner) {
     Game.setGameOver(isWinner);
+  });
+
+  socket.on('error_reload', function(error) {
+    if(error) window.open('/','_self');
   });
 
   /**

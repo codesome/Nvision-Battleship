@@ -312,6 +312,10 @@ function joinWaitingPlayersForSomeone() {
         if (otherPlayer.rooms.indexOf('waiting room') >= 0) {
             // 2 player waiting. Create new game!
             var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
+            if(game.gameStatus == GameStatus.gameOver) {
+                io.to(player.id).emit('error_reload', true);
+                io.to(otherPlayer.id).emit('error_reload', true);    
+            }
             // create new room for this game
             player.leave('waiting for someone');
             otherPlayer.leave('waiting room');
@@ -333,6 +337,10 @@ function joinWaitingPlayersForSomeone() {
         } else if (otherPlayer.rooms.indexOf('waiting for someone') >= 0 && userArray[url.parse(otherPlayer.handshake.headers.referer).pathname.substring(3)] == player.id) {
             // 2 player waiting. Create new game!
             var game = new BattleshipGame(gameIdCounter++, player.id, otherPlayer.id);
+            if(game.gameStatus == GameStatus.gameOver) {
+                io.to(player.id).emit('error_reload', true);
+                io.to(otherPlayer.id).emit('error_reload', true);    
+            }
             // create new room for this game
             player.leave('waiting for someone');
             otherPlayer.leave('waiting for someone');
@@ -362,7 +370,10 @@ function joinWaitingPlayers() {
     if (players.length >= 2) {
         // 2 player waiting. Create new game!
         var game = new BattleshipGame(gameIdCounter++, players[0].id, players[1].id);
-
+        if(game.gameStatus == GameStatus.gameOver) {
+            io.to(players[0].id).emit('error_reload', true);
+            io.to(players[1].id).emit('error_reload', true);    
+        }
 
         // create new room for this game
         players[0].leave('waiting room');

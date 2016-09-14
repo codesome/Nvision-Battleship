@@ -39,6 +39,10 @@ function BattleshipGame(id, idPlayer1, idPlayer2) {
       horizontal: allShips[i].horizontal
     });
   }
+  if(!users[idPlayer1].email || !users[idPlayer2].email){
+    this.gameStatus = GameStatus.gameOver;
+    return;
+  }
   User.findOne({id:users[idPlayer1].email},function(err,user1){
     User.findOne({id:users[idPlayer2].email},function(err,user2){
 
