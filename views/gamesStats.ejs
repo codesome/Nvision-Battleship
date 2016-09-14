@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Games</title>
+</head>
+<body>
+<style type="text/css">
+	table, th, td {
+		padding: 5px;
+	    border: 1px solid black;
+	    border-collapse: collapse;
+	}
+</style>
+	<table border="1">
+		<thead>
+			<tr>
+				<td>Sl. No.</td>
+				<td>Player 1</td>
+				<td>Player 2</td>
+				<td>Winner</td>
+				<td>Disconnection</td>
+			</tr>
+		</thead>
+		<tbody>
+			<% for(var i=0 ; i<games.length ; i++) { %>
+
+				<tr>
+					<td><%=i+1%></td>
+					<td><%=games[i].player1.username%></td>
+					<td><%=games[i].player2.username%></td>
+					<td><%=games[i].winner%></td>
+					<td><%if(games[i].disconnection){%>YES<%}else{%>NO<%}%></td>
+				</tr>
+
+			<% } %>
+		</tbody>
+	</table>
+
+</body>
+</html>
