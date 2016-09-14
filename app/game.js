@@ -232,6 +232,13 @@ BattleshipGame.prototype.endGame = function(params) {
 
         if(winner.logs[winnerGamePos].result || loser.logs[loserGamePos].result) return;
 
+        var flag = (function(){
+          for(var i=0 ; i<winner.logs.length ; i++) {
+            if(winner.logs[i].playedWith == loser.username && winner.logs[i].result) return false;
+          }
+          return true;
+        })();
+
         winner.logs[winnerGamePos].result = true;
         winner.logs[winnerGamePos].endTime = d;
         loser.logs[loserGamePos].endTime = d;
@@ -239,7 +246,8 @@ BattleshipGame.prototype.endGame = function(params) {
         loser.logs[loserGamePos].disconnection = params.disconnection        
         winner.logs[winnerGamePos].disconnection = params.disconnection        
 
-        if(!params.disconnection){
+
+        if(!params.disconnection && flag){
           winner.gamesWon++;
           winner.lastWinDate = new Date;
         } 
