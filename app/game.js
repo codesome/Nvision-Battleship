@@ -13,6 +13,8 @@ var games = require('../models/games.js');
 function BattleshipGame(id, idPlayer1, idPlayer2) {
   var gameid = ''+idPlayer1+idPlayer2+Math.floor(Math.random()*100000);
   this.id = id;
+  this.player1 = users[idPlayer1].email;
+  this.player2 = users[idPlayer2].email;
   this.gameid = gameid;
   this.currentPlayer = Math.floor(Math.random() * 2);
   this.winningPlayer = null;

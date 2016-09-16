@@ -415,9 +415,17 @@ function leaveGame(socket, disconnected) {
             // Game is unfinished, abort it.
             game.abortGame(users[socket.id].player);
             if (disconnected) {
+                var winner , loser;
+                if(game.winningPlayer==0) {
+                    winner = game.player1;
+                    loser = game.player2;
+                } else {
+                    winner = game.player2;
+                    loser = game.player1;
+                }
                 game.endGame({
-                    winnerId: users[game.getWinnerId()].email,
-                    loserId: users[game.getLoserId()].email,
+                    winnerId: winner,
+                    loserId: loser,
                     disconnection: true
                 });
             }
