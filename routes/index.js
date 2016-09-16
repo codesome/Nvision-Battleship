@@ -187,16 +187,16 @@ app.get('/replay/:gameid',ensureNotAMobile,function(req,res){
   });
 });
 
-app.get('/wantitgetit/games',function(req,res){
+/*app.get('/wantitgetit/games',function(req,res){
   games.find({},function(err,games){
     res.render('gamesStats',{games:games});
   });
-});
+});*/
 
-app.get('/wantitgetit/users',function(req,res){
+/*app.get('/wantitgetit/users',function(req,res){
   User.find({},function(err,users){
     res.render('userStats',{users:users});
   });
-});
+});*/
 
 module.exports = app;
