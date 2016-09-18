@@ -99,7 +99,7 @@ app.get('/myHistory',ensureNotAMobile,require('connect-ensure-login').ensureLogg
   }
 });
 
-app.post('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureLoggedIn(),function(req,res){
+/*app.post('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureLoggedIn(),function(req,res){
   if(req.user && req.user._id){
     User.find({},function(err,users){
       if(users){
@@ -141,10 +141,17 @@ app.post('/leaderboard',ensureNotAMobile,require('connect-ensure-login').ensureL
   } else {
     res.redirect('/');
   }
-});
+});*/
+
+var Score = require('../models/Score.js');
 
 app.get('/leaderboard',function (req,res) {
-  res.send('We are optimising the leaderboard, it will be up shortly');
+  Score.findOne({}, function (err, scores) {
+    if(scores)
+      res.render('leaderboard',{users:scores.users, update: scores.updateDate});
+    else
+      res.redirect('/');
+  });
 });
 
 app.get('/login', ensureNotAMobile,function(req, res) {

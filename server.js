@@ -31,6 +31,7 @@ const expressSession = require('express-session');
 const MStore = require('connect-mongo')(expressSession);
 
 const User = require('./models/User.js');
+const Score = require('./models/Score.js');
 
 const config = require('./config.js');
 
@@ -465,3 +466,67 @@ function getClientsInRoom(room) {
     }
     return clients;
 }
+
+
+
+
+
+
+var CronJob = require('cron').CronJob;
+
+function updatedb() {
+    User.find({},function(err,users){
+        if(users){
+            var u = [];
+            var gamesWon;
+            var temp;
+            for(var i=0 ; i<users.length ; i++) {
+                gamesWon = 0;
+                temp = {};
+                for(var j=0 ; j<users[i].logs.length ; j++) {
+                    if(!temp[users[i].logs[j].playedWith] && users[i].logs[j].result) {
+                        temp[users[i].logs[j].playedWith] = true;
+                        gamesWon++;
+                    }
+                }
+                u.push({
+                    gamesWon:gamesWon,
+                    lastWinDate: users[i].lastWinDate,
+                    username: users[i].username,
+                });
+            }
+            u.sort(function compare(a,b) {
+                if (a.gamesWon > b.gamesWon)
+                    return -1;
+                else if (a.gamesWon < b.gamesWon)
+                    return 1;
+                else {
+                    if(Date.parse(a.lastWinDate) < Date.parse(b.lastWinDate))
+                        return -1;
+                    else
+                        return 1;
+                }
+            });
+            Score.remove({},function (err) {
+                Score({
+                    users:u.map(function (val) {
+                        return {
+                            username: val.username,
+                            gamesWon: val.gamesWon
+                        };
+                    }),
+                    updateDate: new Date()
+                }).save(function (err) {
+                    if(err) console.log(err);
+                    else console.log('Leaderboard updated');
+                })
+            })
+        }
+    });
+}
+
+(function () {
+    updatedb();
+})();
+
+new CronJob("00 */30 * * * *", updatedb, null, true);
