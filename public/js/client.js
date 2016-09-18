@@ -2,7 +2,6 @@ var socket = io();
 var gameid = "";
 var newMsg = false;
 var title = "Battleship - &eta;vision";
-var opponentName;
 $(function() {
   /**
    * Successfully connected to server event

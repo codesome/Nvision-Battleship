@@ -134,10 +134,10 @@ var Game = (function() {
 
     if(isWinner) {
       $('#turn-status').removeClass('alert-opponent-turn').removeClass('alert-your-turn')
-              .addClass('alert-winner').html('You won! <a href="#" class="btn-leave-game">Play again</a> or <a href="/replay/'+gameid+'">Watch replay</a> of this game');
+              .addClass('alert-winner').html('You won! <a href="/u/'+opponentName+'" class="btn-leave-game">Play again</a> or <a href="/replay/'+gameid+'">Watch replay</a> of this game');
     } else {
       $('#turn-status').removeClass('alert-opponent-turn').removeClass('alert-your-turn')
-              .addClass('alert-loser').html('You lost. <a href="#" class="btn-leave-game">Play again</a> or <a href="/replay/'+gameid+'">Watch replay</a> of this game');
+              .addClass('alert-loser').html('You lost. <a href="/u/'+opponentName+'" class="btn-leave-game">Play again</a> or <a href="/replay/'+gameid+'">Watch replay</a> of this game');
     }
     $('.btn-leave-game').click(sendLeaveRequest);
   }
