@@ -153,7 +153,8 @@ app.get('/leaderboard',function (req,res) {
       console.log(d);
       var x = '';
       if(d){
-        x = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + '&nbsp; ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2) + ':' + ('0'+d.getSeconds()).slice(-2) + ' hrs';
+        // x = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + '&nbsp; ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2) + ':' + ('0'+d.getSeconds()).slice(-2) + ' hrs';
+        x = d.toLocaleString('en', { timeZone: 'Asia/Kolkata', year: 'numeric', month: 'long', day: 'numeric' }) + "  " + d.toLocaleTimeString('en', { timeZone: 'Asia/Kolkata' })
       }
 
       res.render('leaderboard',{users:scores.users, update: x});

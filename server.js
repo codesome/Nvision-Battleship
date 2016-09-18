@@ -529,4 +529,4 @@ function updatedb() {
     updatedb();
 })();
 
-new CronJob("00 */30 * * * *", updatedb, null, true);
+new CronJob("00 */30 * * * *", updatedb, null, true, "Asia/Kolkata");
