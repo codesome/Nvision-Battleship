@@ -1,3 +1,4 @@
+var opponentName;
 var GameStatus = {
   inProgress: 1,
   gameOver: 2
