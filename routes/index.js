@@ -147,8 +147,17 @@ var Score = require('../models/Score.js');
 
 app.get('/leaderboard',function (req,res) {
   Score.findOne({}, function (err, scores) {
-    if(scores)
-      res.render('leaderboard',{users:scores.users, update: scores.updateDate});
+    if(scores){
+      var d = new Date(Date.parse(scores.updateDate));
+
+      console.log(d);
+      var x = '';
+      if(d){
+        x = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + '&nbsp; ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2) + ':' + ('0'+d.getSeconds()).slice(-2) + ' hrs';
+      }
+
+      res.render('leaderboard',{users:scores.users, update: x});
+    }
     else
       res.redirect('/');
   });
