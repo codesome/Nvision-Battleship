@@ -9,7 +9,7 @@ the opponent's ships.
 
 Step 1: Download/clone.
 ```
-git clone https://github.com/thecodesome/NvisionBattleship.git
+git clone https://github.com/codesome/NvisionBattleship.git
 ```
 Step 2: Install dependencies.
 ```
